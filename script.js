@@ -295,6 +295,16 @@ function toggleSound() {
 
 function flashCorrect() {
 
+  const allowedGames = [
+    "pub-trivia",
+    "category-trivia",
+    "family-feud"
+  ];
+
+  if (!allowedGames.includes(activeGame)) {
+    return;
+  }
+
   document.body.classList.remove(
     "wrong-flash"
   );
@@ -313,6 +323,16 @@ function flashCorrect() {
 }
 
 function flashWrong() {
+
+  const allowedGames = [
+    "pub-trivia",
+    "category-trivia",
+    "family-feud"
+  ];
+
+  if (!allowedGames.includes(activeGame)) {
+    return;
+  }
 
   document.body.classList.remove(
     "correct-flash"
@@ -1222,9 +1242,25 @@ function initialisePubTrivia() {
 
   const next =
     $("#pub-next-button");
+const previous =
+  document.createElement("button");
 
+previous.className =
+  "secondary-button";
+
+previous.type =
+  "button";
+
+previous.textContent =
+  "← PREVIOUS";
+
+reveal.parentElement.prepend(
+  previous
+);
   function showQuestion() {
-
+previous.disabled =
+  questionIndex === 0;
+     
     number.textContent =
       questionIndex + 1;
 
@@ -1336,7 +1372,20 @@ function initialisePubTrivia() {
       showQuestion();
     }
   );
+previous.onclick = () => {
 
+  if (questionIndex <= 0) {
+    return;
+  }
+
+  questionIndex -= 1;
+
+  reveal.classList.remove(
+    "hidden"
+  );
+
+  showQuestion();
+};
   showQuestion();
 }
 
@@ -1607,7 +1656,34 @@ function renderCategoryBoard() {
   );
 
   board.innerHTML = "";
+let boardTurnIndicator =
+  document.getElementById(
+    "category-board-turn"
+  );
 
+if (!boardTurnIndicator) {
+
+  boardTurnIndicator =
+    document.createElement("div");
+
+  boardTurnIndicator.id =
+    "category-board-turn";
+
+  boardTurnIndicator.className =
+    "turn-indicator";
+
+  board.parentElement.insertBefore(
+    boardTurnIndicator,
+    board
+  );
+}
+
+const choosingTeam =
+  state.category.currentTurn %
+  state.teamCount;
+
+boardTurnIndicator.textContent =
+  `${state.teams[choosingTeam].name.toUpperCase()}'S TURN — CHOOSE A QUESTION`;
   CATEGORY_DATA.forEach(
     (column, columnIndex) => {
 
@@ -1744,6 +1820,9 @@ function openCategoryQuestion(
   $("#category-board")
     .classList.add("hidden");
 
+  $("#category-board-turn")
+    ?.classList.add("hidden");
+
   $("#category-question-view")
     .classList.remove("hidden");
 
@@ -1753,7 +1832,7 @@ function openCategoryQuestion(
 
   $("#category-turn-indicator")
     .textContent =
-      `${state.teams[turn].name}'S TURN`;
+      `${state.teams[turn].name}'S QUESTION`;
 
   $("#category-question")
     .textContent =
@@ -1773,7 +1852,9 @@ function openCategoryQuestion(
   $("#category-steal-panel")
     .classList.add("hidden");
 
-  let mainTimer =
+  let finished = false;
+
+  const mainTimer =
     createCountdown(
       $("#category-timer"),
       30,
@@ -1793,10 +1874,19 @@ function openCategoryQuestion(
   const revealButton =
     $("#category-reveal-button");
 
-  function finish(
+  const controls =
+    $("#category-host-controls");
+
+  function showAnswerAndFinish(
     result,
     scorer = null
   ) {
+
+    if (finished) {
+      return;
+    }
+
+    finished = true;
 
     mainTimer.stop();
 
@@ -1814,23 +1904,57 @@ function openCategoryQuestion(
       );
 
       flashCorrect();
+
+    } else {
+
+      flashWrong();
     }
 
-    state.category.currentTurn =
-      (
-        state.category.currentTurn +
-        1
-      ) % state.teamCount;
+    $("#category-answer-section")
+      .classList.remove("hidden");
+
+    $("#category-steal-panel")
+      .classList.add("hidden");
+
+    controls.innerHTML = "";
+
+    const backButton =
+      document.createElement("button");
+
+    backButton.className =
+      "primary-button";
+
+    backButton.textContent =
+      "RETURN TO BOARD";
+
+    backButton.onclick = () => {
+
+      state.category.currentTurn =
+        (
+          state.category.currentTurn +
+          1
+        ) % state.teamCount;
+
+      saveState();
+
+      $("#category-board-turn")
+        ?.classList.remove("hidden");
+
+      renderCategoryBoard();
+    };
+
+    controls.appendChild(
+      backButton
+    );
 
     saveState();
-
-    setTimeout(
-      renderCategoryBoard,
-      550
-    );
   }
 
   function openSteal() {
+
+    if (finished) {
+      return;
+    }
 
     mainTimer.stop();
 
@@ -1854,19 +1978,9 @@ function openCategoryQuestion(
         15,
         () => {
 
-          state.category.tiles[key] =
-            "dead";
-
-          state.category.currentTurn =
-            (
-              state.category.currentTurn +
-              1
-            ) %
-            state.teamCount;
-
-          saveState();
-
-          renderCategoryBoard();
+          showAnswerAndFinish(
+            "dead"
+          );
         }
       );
 
@@ -1891,58 +2005,55 @@ function openCategoryQuestion(
         button.textContent =
           `${team.name} BUZZ`;
 
-        button.addEventListener(
-          "click",
-          () => {
+        button.onclick = () => {
 
-            stealTimer.stop();
+          stealTimer.stop();
 
-            buttonContainer.innerHTML =
-              "";
+          buttonContainer.innerHTML =
+            "";
 
-            const correct =
-              document.createElement(
-                "button"
-              );
-
-            correct.className =
-              "correct-button";
-
-            correct.textContent =
-              "STEAL CORRECT";
-
-            correct.onclick =
-              () =>
-                finish(
-                  "correct",
-                  teamIndex
-                );
-
-            const wrong =
-              document.createElement(
-                "button"
-              );
-
-            wrong.className =
-              "wrong-button";
-
-            wrong.textContent =
-              "STEAL WRONG";
-
-            wrong.onclick =
-              () => {
-
-                flashWrong();
-
-                finish("dead");
-              };
-
-            buttonContainer.append(
-              correct,
-              wrong
+          const correct =
+            document.createElement(
+              "button"
             );
-          }
-        );
+
+          correct.className =
+            "correct-button";
+
+          correct.textContent =
+            "STEAL CORRECT";
+
+          correct.onclick = () => {
+
+            showAnswerAndFinish(
+              "correct",
+              teamIndex
+            );
+          };
+
+          const wrong =
+            document.createElement(
+              "button"
+            );
+
+          wrong.className =
+            "wrong-button";
+
+          wrong.textContent =
+            "STEAL WRONG";
+
+          wrong.onclick = () => {
+
+            showAnswerAndFinish(
+              "dead"
+            );
+          };
+
+          buttonContainer.append(
+            correct,
+            wrong
+          );
+        };
 
         buttonContainer.appendChild(
           button
@@ -1953,32 +2064,28 @@ function openCategoryQuestion(
     stealTimer.start();
   }
 
-  correctButton.onclick =
-    () =>
-      finish(
-        "correct",
-        turn
-      );
+  correctButton.onclick = () => {
+
+    showAnswerAndFinish(
+      "correct",
+      turn
+    );
+  };
 
   wrongButton.onclick =
     openSteal;
 
-  revealButton.onclick =
-    () => {
+  revealButton.onclick = () => {
 
-      $("#category-answer-section")
-        .classList.remove(
-          "hidden"
-        );
-
-      playSfx(
-        "reveal-sound"
+    $("#category-answer-section")
+      .classList.remove(
+        "hidden"
       );
-    };
-}
 
-
-/* ============================================================
+    playSfx(
+      "reveal-sound"
+    );
+}/* ============================================================
    WHO'S THAT DATA
 ============================================================ */
 
@@ -2114,7 +2221,8 @@ function initialiseWhosThat() {
 
     $("#whos-reveal-name")
       .classList.add("hidden");
-
+$("#whos-reveal-name")
+  .textContent = "";
     $("#whos-next-button")
       .classList.add("hidden");
 
@@ -3219,7 +3327,8 @@ function initialiseSongGame() {
   }
 
   function revealSongAnswer() {
-
+$("#song-answer .song-next-button")
+  ?.remove();
     const item =
       SONG_DATA[round];
 
@@ -3242,7 +3351,7 @@ function initialiseSongGame() {
       );
 
     next.className =
-      "primary-button";
+  "primary-button song-next-button";
 
     next.textContent =
       round === 9
@@ -4354,9 +4463,9 @@ function initialiseGeoGuessr() {
     );
 
     const awards =
-      state.teamCount === 2
-        ? [30, 20]
-        : [30, 20, 10];
+  state.teamCount === 2
+    ? [30, 10]
+    : [30, 10, 0];
 
     results.forEach(
       (result, place) => {
