@@ -1,6 +1,6 @@
 /* ============================================================
    UNTITLED GAMES
-   Main Game Logic
+   Main Game Logic — Clean Rebuild
 ============================================================ */
 
 "use strict";
@@ -188,7 +188,7 @@ function cloneTemplate(id) {
    SOUND
 ============================================================ */
 
-const menuMusic = $("#menu-music");
+// Main-menu music removed in this version.
 
 function safePlay(audio) {
 
@@ -221,23 +221,11 @@ function playSfx(id) {
 }
 
 function startMenuMusic() {
-
-  if (!state.soundOn || !menuMusic) {
-    return;
-  }
-
-  menuMusic.volume = 0.22;
-
-  menuMusic.play().catch(() => {});
+  // Main menu music intentionally disabled.
 }
 
 function stopMenuMusic() {
-
-  if (!menuMusic) {
-    return;
-  }
-
-  menuMusic.pause();
+  // Main menu music intentionally disabled.
 }
 
 function updateSoundLabels() {
@@ -265,24 +253,6 @@ function updateSoundLabels() {
 function toggleSound() {
 
   state.soundOn = !state.soundOn;
-
-  if (!state.soundOn) {
-    stopMenuMusic();
-  } else {
-
-    const currentScreen =
-      $(".screen.active");
-
-    if (
-      currentScreen &&
-      (
-        currentScreen.id === "hub-screen" ||
-        currentScreen.id === "setup-screen"
-      )
-    ) {
-      startMenuMusic();
-    }
-  }
 
   updateSoundLabels();
   saveState();
@@ -383,6 +353,21 @@ function changeScore(
 
 function updateScoreboards() {
 
+  const masterBoard =
+    $("#master-scoreboard");
+
+  if (masterBoard) {
+    masterBoard.classList.toggle(
+      "two-teams",
+      state.teamCount === 2
+    );
+
+    masterBoard.classList.toggle(
+      "three-teams",
+      state.teamCount === 3
+    );
+  }
+
   state.teams.forEach(
     (team, index) => {
 
@@ -435,7 +420,10 @@ function renderGameScoreboard() {
   const board =
     document.createElement("div");
 
-  board.className = "scoreboard";
+  board.className =
+    state.teamCount === 2
+      ? "scoreboard two-teams"
+      : "scoreboard three-teams";
 
   activeTeams().forEach(
     (team, index) => {
@@ -504,6 +492,21 @@ function renderGameScoreboard() {
             teamIndex,
             amount
           );
+
+          if (
+            [
+              "pub-trivia",
+              "category-trivia",
+              "family-feud"
+            ].includes(activeGame)
+          ) {
+
+            if (amount > 0) {
+              flashCorrect();
+            } else if (amount < 0) {
+              flashWrong();
+            }
+          }
         }
       );
     });
@@ -1209,183 +1212,120 @@ const PUB_QUESTIONS = [
 
 function initialisePubTrivia() {
 
-  const container =
-    $("#game-content");
+  const container = $("#game-content");
 
   container.appendChild(
-    cloneTemplate(
-      "pub-trivia-template"
-    )
+    cloneTemplate("pub-trivia-template")
   );
 
   let questionIndex = 0;
-
   let phase = "questions";
 
-  const number =
-    $("#pub-question-number");
+  const number = $("#pub-question-number");
+  const question = $("#pub-question");
+  const answerSection = $("#pub-answer-section");
+  const answer = $("#pub-answer");
+  const explanation = $("#pub-explanation");
+  const reveal = $("#pub-reveal-button");
+  const next = $("#pub-next-button");
 
-  const question =
-    $("#pub-question");
+  const previous = document.createElement("button");
+  previous.className = "secondary-button";
+  previous.type = "button";
+  previous.textContent = "← PREVIOUS";
 
-  const answerSection =
-    $("#pub-answer-section");
+  reveal.parentElement.prepend(previous);
 
-  const answer =
-    $("#pub-answer");
-
-  const explanation =
-    $("#pub-explanation");
-
-  const reveal =
-    $("#pub-reveal-button");
-
-  const next =
-    $("#pub-next-button");
-const previous =
-  document.createElement("button");
-
-previous.className =
-  "secondary-button";
-
-previous.type =
-  "button";
-
-previous.textContent =
-  "← PREVIOUS";
-
-reveal.parentElement.prepend(
-  previous
-);
   function showQuestion() {
-previous.disabled =
-  questionIndex === 0;
-     
-    number.textContent =
-      questionIndex + 1;
 
-    question.textContent =
-      PUB_QUESTIONS[
-        questionIndex
-      ].q;
+    const item = PUB_QUESTIONS[questionIndex];
 
-    answerSection.classList.add(
-      "hidden"
-    );
+    number.textContent = questionIndex + 1;
+    question.textContent = item.q;
 
-    next.classList.add(
-      "hidden"
-    );
+    answerSection.classList.add("hidden");
+    reveal.classList.remove("hidden");
+    next.classList.add("hidden");
+
+    previous.disabled = questionIndex === 0;
 
     if (phase === "questions") {
 
       reveal.textContent =
-        questionIndex === 9
+        questionIndex === PUB_QUESTIONS.length - 1
           ? "PENS DOWN"
           : "NEXT QUESTION";
 
     } else {
 
-      reveal.textContent =
-        "REVEAL ANSWER";
+      reveal.textContent = "REVEAL ANSWER";
     }
   }
 
-  reveal.addEventListener(
-    "click",
-    () => {
+  previous.onclick = () => {
 
-      if (phase === "questions") {
+    if (questionIndex <= 0) {
+      return;
+    }
 
-        if (questionIndex < 9) {
+    questionIndex -= 1;
+    showQuestion();
+  };
 
-          questionIndex += 1;
+  reveal.onclick = () => {
 
-          showQuestion();
+    if (phase === "questions") {
 
-          return;
-        }
+      if (
+        questionIndex <
+        PUB_QUESTIONS.length - 1
+      ) {
 
-        phase = "answers";
-
-        questionIndex = 0;
-
-        reveal.textContent =
-          "REVEAL ANSWER";
-
+        questionIndex += 1;
         showQuestion();
-
         return;
       }
 
-      const item =
-        PUB_QUESTIONS[
-          questionIndex
-        ];
-
-      answer.textContent = item.a;
-      explanation.textContent =
-        item.why;
-
-      answerSection.classList.remove(
-        "hidden"
-      );
-
-      playSfx("reveal-sound");
-
-      reveal.classList.add(
-        "hidden"
-      );
-
-      next.classList.remove(
-        "hidden"
-      );
-
-      next.textContent =
-        questionIndex === 9
-          ? "FINISH PUB TRIVIA"
-          : "NEXT ANSWER";
-    }
-  );
-
-  next.addEventListener(
-    "click",
-    () => {
-
-      if (questionIndex === 9) {
-
-        markGameComplete(
-          "pub-trivia"
-        );
-
-        returnToHub();
-
-        return;
-      }
-
-      questionIndex += 1;
-
-      reveal.classList.remove(
-        "hidden"
-      );
-
+      phase = "answers";
+      questionIndex = 0;
       showQuestion();
+      return;
     }
-  );
-previous.onclick = () => {
 
-  if (questionIndex <= 0) {
-    return;
-  }
+    const item = PUB_QUESTIONS[questionIndex];
 
-  questionIndex -= 1;
+    answer.textContent = item.a;
+    explanation.textContent = item.why;
 
-  reveal.classList.remove(
-    "hidden"
-  );
+    answerSection.classList.remove("hidden");
 
-  showQuestion();
-};
+    playSfx("reveal-sound");
+
+    reveal.classList.add("hidden");
+    next.classList.remove("hidden");
+
+    next.textContent =
+      questionIndex === PUB_QUESTIONS.length - 1
+        ? "FINISH PUB TRIVIA"
+        : "NEXT ANSWER";
+  };
+
+  next.onclick = () => {
+
+    if (
+      questionIndex ===
+      PUB_QUESTIONS.length - 1
+    ) {
+
+      markGameComplete("pub-trivia");
+      returnToHub();
+      return;
+    }
+
+    questionIndex += 1;
+    showQuestion();
+  };
+
   showQuestion();
 }
 
@@ -1641,49 +1581,46 @@ function initialiseCategoryTrivia() {
 
 function renderCategoryBoard() {
 
-  const board =
-    $("#category-board");
+  const board = $("#category-board");
+  const questionView = $("#category-question-view");
 
-  const questionView =
-    $("#category-question-view");
-
-  board.classList.remove(
-    "hidden"
-  );
-
-  questionView.classList.add(
-    "hidden"
-  );
-
+  questionView.classList.add("hidden");
+  board.classList.remove("hidden");
   board.innerHTML = "";
-let boardTurnIndicator =
-  document.getElementById(
-    "category-board-turn"
+
+  let boardTurnIndicator =
+    document.getElementById(
+      "category-board-turn"
+    );
+
+  if (!boardTurnIndicator) {
+
+    boardTurnIndicator =
+      document.createElement("div");
+
+    boardTurnIndicator.id =
+      "category-board-turn";
+
+    boardTurnIndicator.className =
+      "turn-indicator category-board-turn";
+
+    board.parentElement.insertBefore(
+      boardTurnIndicator,
+      board
+    );
+  }
+
+  boardTurnIndicator.classList.remove(
+    "hidden"
   );
 
-if (!boardTurnIndicator) {
+  const choosingTeam =
+    state.category.currentTurn %
+    state.teamCount;
 
-  boardTurnIndicator =
-    document.createElement("div");
+  boardTurnIndicator.textContent =
+    `${state.teams[choosingTeam].name.toUpperCase()}'S TURN — CHOOSE A QUESTION`;
 
-  boardTurnIndicator.id =
-    "category-board-turn";
-
-  boardTurnIndicator.className =
-    "turn-indicator";
-
-  board.parentElement.insertBefore(
-    boardTurnIndicator,
-    board
-  );
-}
-
-const choosingTeam =
-  state.category.currentTurn %
-  state.teamCount;
-
-boardTurnIndicator.textContent =
-  `${state.teams[choosingTeam].name.toUpperCase()}'S TURN — CHOOSE A QUESTION`;
   CATEGORY_DATA.forEach(
     (column, columnIndex) => {
 
@@ -1718,7 +1655,6 @@ boardTurnIndicator.textContent =
             );
 
           button.type = "button";
-
           button.className =
             "category-tile";
 
@@ -1734,9 +1670,7 @@ boardTurnIndicator.textContent =
             button.textContent = "✓";
             button.disabled = true;
 
-          } else if (
-            status === "dead"
-          ) {
+          } else if (status === "dead") {
 
             button.classList.add(
               "dead"
@@ -1750,14 +1684,12 @@ boardTurnIndicator.textContent =
             button.textContent =
               question.value;
 
-            button.addEventListener(
-              "click",
-              () =>
-                openCategoryQuestion(
-                  columnIndex,
-                  questionIndex
-                )
-            );
+            button.onclick = () => {
+              openCategoryQuestion(
+                columnIndex,
+                questionIndex
+              );
+            };
           }
 
           columnElement.appendChild(
@@ -1808,23 +1740,27 @@ function openCategoryQuestion(
 ) {
 
   const item =
-    CATEGORY_DATA[
-      columnIndex
-    ].questions[
-      questionIndex
-    ];
+    CATEGORY_DATA[columnIndex]
+      .questions[questionIndex];
 
   const key =
     `${columnIndex}-${questionIndex}`;
 
-  $("#category-board")
-    .classList.add("hidden");
+  const board = $("#category-board");
+  const boardTurn =
+    $("#category-board-turn");
+  const questionView =
+    $("#category-question-view");
+  const answerSection =
+    $("#category-answer-section");
+  const stealPanel =
+    $("#category-steal-panel");
+  const controls =
+    $("#category-host-controls");
 
-  $("#category-board-turn")
-    ?.classList.add("hidden");
-
-  $("#category-question-view")
-    .classList.remove("hidden");
+  board.classList.add("hidden");
+  boardTurn?.classList.add("hidden");
+  questionView.classList.remove("hidden");
 
   const turn =
     state.category.currentTurn %
@@ -1832,38 +1768,34 @@ function openCategoryQuestion(
 
   $("#category-turn-indicator")
     .textContent =
-      `${state.teams[turn].name}'S QUESTION`;
+      `${state.teams[turn].name.toUpperCase()}'S QUESTION`;
 
   $("#category-question")
-    .textContent =
-      item.q;
+    .textContent = item.q;
 
   $("#category-answer")
-    .textContent =
-      item.a;
+    .textContent = item.a;
 
   $("#category-explanation")
-    .textContent =
-      item.why;
+    .textContent = item.why;
 
-  $("#category-answer-section")
-    .classList.add("hidden");
+  answerSection.classList.add(
+    "hidden"
+  );
 
-  $("#category-steal-panel")
-    .classList.add("hidden");
+  stealPanel.classList.add(
+    "hidden"
+  );
 
   let finished = false;
+  let stealTimer = null;
 
   const mainTimer =
     createCountdown(
       $("#category-timer"),
       30,
-      () => {
-        openSteal();
-      }
+      openSteal
     );
-
-  mainTimer.start();
 
   const correctButton =
     $("#category-correct-button");
@@ -1874,8 +1806,14 @@ function openCategoryQuestion(
   const revealButton =
     $("#category-reveal-button");
 
-  const controls =
-    $("#category-host-controls");
+  function revealAnswer() {
+
+    answerSection.classList.remove(
+      "hidden"
+    );
+
+    playSfx("reveal-sound");
+  }
 
   function showAnswerAndFinish(
     result,
@@ -1889,6 +1827,10 @@ function openCategoryQuestion(
     finished = true;
 
     mainTimer.stop();
+
+    if (stealTimer) {
+      stealTimer.stop();
+    }
 
     state.category.tiles[key] =
       result;
@@ -1910,19 +1852,23 @@ function openCategoryQuestion(
       flashWrong();
     }
 
-    $("#category-answer-section")
-      .classList.remove("hidden");
+    revealAnswer();
 
-    $("#category-steal-panel")
-      .classList.add("hidden");
+    stealPanel.classList.add(
+      "hidden"
+    );
 
     controls.innerHTML = "";
 
     const backButton =
-      document.createElement("button");
+      document.createElement(
+        "button"
+      );
 
     backButton.className =
       "primary-button";
+
+    backButton.type = "button";
 
     backButton.textContent =
       "RETURN TO BOARD";
@@ -1936,10 +1882,6 @@ function openCategoryQuestion(
         ) % state.teamCount;
 
       saveState();
-
-      $("#category-board-turn")
-        ?.classList.remove("hidden");
-
       renderCategoryBoard();
     };
 
@@ -1957,11 +1899,7 @@ function openCategoryQuestion(
     }
 
     mainTimer.stop();
-
     flashWrong();
-
-    const stealPanel =
-      $("#category-steal-panel");
 
     stealPanel.classList.remove(
       "hidden"
@@ -1972,12 +1910,11 @@ function openCategoryQuestion(
 
     buttonContainer.innerHTML = "";
 
-    const stealTimer =
+    stealTimer =
       createCountdown(
         $("#category-steal-timer"),
         15,
         () => {
-
           showAnswerAndFinish(
             "dead"
           );
@@ -2007,6 +1944,14 @@ function openCategoryQuestion(
 
         button.onclick = () => {
 
+          if (finished) {
+            return;
+          }
+
+          playSfx(
+            "team-buzz-sound"
+          );
+
           stealTimer.stop();
 
           buttonContainer.innerHTML =
@@ -2020,11 +1965,12 @@ function openCategoryQuestion(
           correct.className =
             "correct-button";
 
+          correct.type = "button";
+
           correct.textContent =
             "STEAL CORRECT";
 
           correct.onclick = () => {
-
             showAnswerAndFinish(
               "correct",
               teamIndex
@@ -2039,11 +1985,12 @@ function openCategoryQuestion(
           wrong.className =
             "wrong-button";
 
+          wrong.type = "button";
+
           wrong.textContent =
             "STEAL WRONG";
 
           wrong.onclick = () => {
-
             showAnswerAndFinish(
               "dead"
             );
@@ -2065,27 +2012,21 @@ function openCategoryQuestion(
   }
 
   correctButton.onclick = () => {
-
     showAnswerAndFinish(
       "correct",
       turn
     );
   };
 
-  wrongButton.onclick =
-    openSteal;
+  wrongButton.onclick = openSteal;
 
-  revealButton.onclick = () => {
+  revealButton.onclick = revealAnswer;
 
-    $("#category-answer-section")
-      .classList.remove(
-        "hidden"
-      );
+  mainTimer.start();
+}
 
-    playSfx(
-      "reveal-sound"
-    );
-}/* ============================================================
+
+/* ============================================================
    WHO'S THAT DATA
 ============================================================ */
 
@@ -2221,8 +2162,10 @@ function initialiseWhosThat() {
 
     $("#whos-reveal-name")
       .classList.add("hidden");
-$("#whos-reveal-name")
-  .textContent = "";
+
+    $("#whos-reveal-name")
+      .textContent = "";
+
     $("#whos-next-button")
       .classList.add("hidden");
 
@@ -2258,6 +2201,10 @@ $("#whos-reveal-name")
           }
 
           selectedTeam = index;
+
+          playSfx(
+            "team-buzz-sound"
+          );
 
           timer.pause();
 
@@ -2521,6 +2468,7 @@ const REVIEW_DATA = [
   }
 ];
 
+
 /* ============================================================
    MOVIE REVIEWS
 ============================================================ */
@@ -2651,8 +2599,7 @@ function initialiseMovieReviews() {
         item.poster;
 
       $("#review-movie-title")
-        .textContent =
-          item.title;
+        .textContent = "";
 
       $("#review-reveal")
         .classList.remove(
@@ -3327,8 +3274,10 @@ function initialiseSongGame() {
   }
 
   function revealSongAnswer() {
-$("#song-answer .song-next-button")
-  ?.remove();
+
+    $("#song-answer .song-next-button")
+      ?.remove();
+
     const item =
       SONG_DATA[round];
 
@@ -3351,7 +3300,7 @@ $("#song-answer .song-next-button")
       );
 
     next.className =
-  "primary-button song-next-button";
+      "primary-button song-next-button";
 
     next.textContent =
       round === 9
@@ -3815,7 +3764,6 @@ function initialisePixelMovie() {
     );
 
   let round = 0;
-
   let stage = 0;
 
   let locks =
@@ -3947,169 +3895,174 @@ function initialisePixelMovie() {
           "hidden"
         );
 
-      const marking =
-        $("#pixel-marking-buttons");
+      $("#pixel-clearer-button")
+        .disabled = true;
 
-      marking.innerHTML = "";
+      $("#pixel-reveal-button")
+        .disabled = true;
 
-      const completed =
-        new Set();
-
-      activeTeams().forEach(
-        (team, index) => {
-
-          const wrapper =
-            document.createElement(
-              "div"
-            );
-
-          wrapper.style.margin =
-            "8px";
-
-          const label =
-            document.createElement(
-              "strong"
-            );
-
-          label.textContent =
-            `${team.name}: ${
-              locks[index] === null
-                ? "NO LOCK"
-                : locks[index]
-            }`;
-
-          const correct =
-            document.createElement(
-              "button"
-            );
-
-          correct.className =
-            "correct-button";
-
-          correct.textContent =
-            "CORRECT";
-
-          const wrong =
-            document.createElement(
-              "button"
-            );
-
-          wrong.className =
-            "wrong-button";
-
-          wrong.textContent =
-            "WRONG";
-
-          function score(
-            isCorrect
-          ) {
-
-            if (
-              completed.has(index)
-            ) {
-              return;
-            }
-
-            completed.add(index);
-
-            if (
-              isCorrect &&
-              locks[index] !== null
-            ) {
-
-              changeScore(
-                index,
-                locks[index]
-              );
-
-              flashCorrect();
-
-            } else {
-
-              flashWrong();
-            }
-
-            correct.disabled = true;
-            wrong.disabled = true;
-
-            if (
-              completed.size ===
-              state.teamCount
-            ) {
-
-              const next =
-                document.createElement(
-                  "button"
-                );
-
-              next.className =
-                "primary-button";
-
-              next.textContent =
-                round === 9
-                  ? "FINISH PIXEL MOVIE"
-                  : "NEXT MOVIE";
-
-              next.onclick =
-                nextRound;
-
-              marking.appendChild(
-                next
-              );
-            }
-          }
-
-          correct.onclick =
-            () => score(true);
-
-          wrong.onclick =
-            () => score(false);
-
-          wrapper.append(
-            label,
-            document.createElement(
-              "br"
-            ),
-            correct,
-            wrong
-          );
-
-          marking.appendChild(
-            wrapper
-          );
-        }
-      );
+      renderMarkingButtons();
 
       playSfx(
         "reveal-sound"
       );
     };
 
-  function nextRound() {
+  function renderMarkingButtons() {
 
-    if (round === 9) {
+    const container =
+      $("#pixel-marking-buttons");
 
-      markGameComplete(
-        "pixel-movie"
-      );
+    container.innerHTML = "";
 
-      returnToHub();
+    const marked =
+      new Set();
 
-      return;
+    activeTeams().forEach(
+      (team, index) => {
+
+        const wrapper =
+          document.createElement(
+            "div"
+          );
+
+        wrapper.className =
+          "pixel-mark-row";
+
+        const label =
+          document.createElement(
+            "span"
+          );
+
+        label.textContent =
+          locks[index] === null
+            ? `${team.name} — DID NOT LOCK`
+            : `${team.name} — ${locks[index]} POINTS`;
+
+        const correct =
+          document.createElement(
+            "button"
+          );
+
+        correct.className =
+          "correct-button";
+
+        correct.textContent =
+          "CORRECT";
+
+        const wrong =
+          document.createElement(
+            "button"
+          );
+
+        wrong.className =
+          "wrong-button";
+
+        wrong.textContent =
+          "WRONG";
+
+        if (
+          locks[index] === null
+        ) {
+          correct.disabled = true;
+          wrong.disabled = true;
+          marked.add(index);
+        }
+
+        function mark(isCorrect) {
+
+          if (marked.has(index)) {
+            return;
+          }
+
+          marked.add(index);
+
+          if (isCorrect) {
+
+            changeScore(
+              index,
+              locks[index]
+            );
+          }
+
+          correct.disabled = true;
+          wrong.disabled = true;
+
+          checkDone();
+        }
+
+        correct.onclick =
+          () => mark(true);
+
+        wrong.onclick =
+          () => mark(false);
+
+        wrapper.append(
+          label,
+          correct,
+          wrong
+        );
+
+        container.appendChild(
+          wrapper
+        );
+      }
+    );
+
+    function checkDone() {
+
+      if (
+        marked.size !==
+        state.teamCount
+      ) {
+        return;
+      }
+
+      const next =
+        document.createElement(
+          "button"
+        );
+
+      next.className =
+        "primary-button";
+
+      next.textContent =
+        round === 9
+          ? "FINISH PIXEL MOVIE"
+          : "NEXT MOVIE";
+
+      next.onclick = () => {
+
+        if (round === 9) {
+
+          markGameComplete(
+            "pixel-movie"
+          );
+
+          returnToHub();
+
+          return;
+        }
+
+        round += 1;
+        stage = 0;
+        revealed = false;
+
+        locks =
+          new Array(
+            state.teamCount
+          ).fill(null);
+
+        $("#pixel-reveal-button")
+          .disabled = false;
+
+        render();
+      };
+
+      container.appendChild(next);
     }
 
-    round += 1;
-
-    stage = 0;
-
-    locks =
-      new Array(
-        state.teamCount
-      ).fill(null);
-
-    revealed = false;
-
-    render();
+    checkDone();
   }
 
   render();
@@ -4118,8 +4071,6 @@ function initialisePixelMovie() {
 
 /* ============================================================
    GEOGUESSR DATA
-
-   Coordinates correspond to the mystery-image locations.
 ============================================================ */
 
 const GEO_DATA = [
@@ -4189,31 +4140,22 @@ function initialiseGeoGuessr() {
 
   let round = 0;
 
-  let observationTimer =
-    null;
-
-  let currentTeam = 0;
-
-  let guesses =
-    new Array(
-      state.teamCount
-    ).fill(null);
+  let observationTimer = null;
 
   let map = null;
 
+  let currentTeam = 0;
+
+  let selectedLatLng = null;
+
   let temporaryMarker = null;
+
+  let guesses = [];
 
   function renderRound() {
 
     const location =
       GEO_DATA[round];
-
-    currentTeam = 0;
-
-    guesses =
-      new Array(
-        state.teamCount
-      ).fill(null);
 
     $("#geo-round-number")
       .textContent =
@@ -4222,12 +4164,15 @@ function initialiseGeoGuessr() {
     $("#geo-mystery-image").src =
       location.image;
 
-    $("#geo-map-stage")
+    $("#geo-results")
       .classList.add(
         "hidden"
       );
 
     $("#geo-results")
+      .innerHTML = "";
+
+    $("#geo-map-stage")
       .classList.add(
         "hidden"
       );
@@ -4237,50 +4182,65 @@ function initialiseGeoGuessr() {
         "hidden"
       );
 
+    $("#geo-start-button")
+      .disabled = false;
+
+    $("#geo-begin-guesses-button")
+      .disabled = false;
+
+    currentTeam = 0;
+
+    selectedLatLng = null;
+
+    guesses = [];
+
     observationTimer =
       createCountdown(
         $("#geo-timer"),
         60,
-        beginGuessing
+        () => {
+
+          $("#geo-start-button")
+            .textContent =
+              "TIME UP";
+        }
       );
   }
 
   $("#geo-start-button")
     .onclick = () => {
 
+      observationTimer.reset(60);
       observationTimer.start();
 
       $("#geo-start-button")
-        .disabled = true;
+        .textContent =
+          "OBSERVING...";
     };
 
   $("#geo-begin-guesses-button")
-    .onclick =
-      beginGuessing;
+    .onclick = () => {
 
-  function beginGuessing() {
+      observationTimer.stop();
 
-    observationTimer.stop();
+      $("#geo-observation-controls")
+        .classList.add(
+          "hidden"
+        );
 
-    $("#geo-observation-controls")
-      .classList.add(
-        "hidden"
-      );
+      $("#geo-map-stage")
+        .classList.remove(
+          "hidden"
+        );
 
-    $("#geo-map-stage")
-      .classList.remove(
-        "hidden"
-      );
-
-    setTimeout(
-      initialiseMap,
-      100
-    );
-  }
+      initialiseMap();
+      renderGeoTeam();
+    };
 
   function initialiseMap() {
 
     if (map) {
+
       map.remove();
       map = null;
     }
@@ -4292,13 +4252,13 @@ function initialiseGeoGuessr() {
       }
     ).setView(
       [15, 10],
-      2
+      1
     );
 
     L.tileLayer(
       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       {
-        maxZoom: 18,
+        maxZoom: 19,
         attribution:
           "&copy; OpenStreetMap contributors"
       }
@@ -4308,50 +4268,50 @@ function initialiseGeoGuessr() {
       "click",
       event => {
 
-        if (
-          temporaryMarker
-        ) {
+        selectedLatLng =
+          event.latlng;
 
-          temporaryMarker
-            .remove();
+        if (temporaryMarker) {
+          temporaryMarker.remove();
         }
 
         temporaryMarker =
           L.marker(
-            event.latlng
+            selectedLatLng
           ).addTo(map);
       }
     );
 
-    showCurrentGeoTeam();
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
   }
 
-  function showCurrentGeoTeam() {
+  function renderGeoTeam() {
 
     $("#geo-current-team")
       .textContent =
-        `${state.teams[currentTeam].name} — PLACE YOUR GUESS`;
+        `${state.teams[currentTeam].name.toUpperCase()} — PLACE YOUR GUESS`;
 
-    if (
-      temporaryMarker
-    ) {
+    selectedLatLng = null;
+
+    if (temporaryMarker) {
 
       temporaryMarker.remove();
+
       temporaryMarker = null;
     }
 
     map.setView(
       [15, 10],
-      2
+      1
     );
   }
 
   $("#geo-lock-button")
     .onclick = () => {
 
-      if (
-        !temporaryMarker
-      ) {
+      if (!selectedLatLng) {
 
         alert(
           "Click somewhere on the map first."
@@ -4360,16 +4320,16 @@ function initialiseGeoGuessr() {
         return;
       }
 
-      guesses[currentTeam] =
-        temporaryMarker.getLatLng();
+      guesses[currentTeam] = {
+        lat:
+          selectedLatLng.lat,
+        lng:
+          selectedLatLng.lng
+      };
 
       playSfx(
         "lock-in-sound"
       );
-
-      temporaryMarker.remove();
-
-      temporaryMarker = null;
 
       currentTeam += 1;
 
@@ -4378,7 +4338,7 @@ function initialiseGeoGuessr() {
         state.teamCount
       ) {
 
-        showCurrentGeoTeam();
+        renderGeoTeam();
 
       } else {
 
@@ -4386,115 +4346,189 @@ function initialiseGeoGuessr() {
       }
     };
 
+  function distanceKm(
+    lat1,
+    lon1,
+    lat2,
+    lon2
+  ) {
+
+    const radius =
+      6371;
+
+    const toRad =
+      degrees =>
+        degrees *
+        Math.PI /
+        180;
+
+    const dLat =
+      toRad(
+        lat2 - lat1
+      );
+
+    const dLon =
+      toRad(
+        lon2 - lon1
+      );
+
+    const a =
+      Math.sin(dLat / 2) *
+      Math.sin(dLat / 2) +
+      Math.cos(
+        toRad(lat1)
+      ) *
+      Math.cos(
+        toRad(lat2)
+      ) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+    const c =
+      2 *
+      Math.atan2(
+        Math.sqrt(a),
+        Math.sqrt(1 - a)
+      );
+
+    return radius * c;
+  }
+
   function revealGeoResults() {
 
     const location =
       GEO_DATA[round];
 
-    const target =
-      L.latLng(
-        location.lat,
-        location.lng
-      );
+    $("#geo-current-team")
+      .textContent =
+        `ANSWER — ${location.name}`;
 
-    const targetMarker =
-      L.marker(target)
+    if (temporaryMarker) {
+
+      temporaryMarker.remove();
+
+      temporaryMarker = null;
+    }
+
+    const actual =
+      L.marker(
+        [
+          location.lat,
+          location.lng
+        ]
+      )
         .addTo(map)
         .bindPopup(
-          `<strong>${location.name}</strong>`
-        )
-        .openPopup();
+          `ACTUAL: ${location.name}`
+        );
 
-    const results =
+    const ranking =
       guesses.map(
         (guess, index) => {
 
-          const km =
-            map.distance(
-              guess,
-              target
-            ) / 1000;
-
-          L.circleMarker(
-            guess,
-            {
-              radius: 9,
-              color:
-                TEAM_COLOURS[
-                  index
-                ],
-              fillColor:
-                TEAM_COLOURS[
-                  index
-                ],
-              fillOpacity: 0.9
-            }
-          )
-            .addTo(map)
-            .bindPopup(
-              state.teams[
-                index
-              ].name
+          const distance =
+            distanceKm(
+              guess.lat,
+              guess.lng,
+              location.lat,
+              location.lng
             );
 
+          const marker =
+            L.marker(
+              [
+                guess.lat,
+                guess.lng
+              ]
+            )
+              .addTo(map)
+              .bindPopup(
+                `${state.teams[index].name}: ${Math.round(distance)} km`
+              );
+
           L.polyline(
-            [guess, target],
-            {
-              color:
-                TEAM_COLOURS[
-                  index
-                ],
-              weight: 2,
-              dashArray: "6,8"
-            }
+            [
+              [
+                guess.lat,
+                guess.lng
+              ],
+              [
+                location.lat,
+                location.lng
+              ]
+            ]
           ).addTo(map);
 
           return {
-            team: index,
-            distance: km
+            index,
+            distance,
+            marker
           };
         }
       );
 
-    results.sort(
+    ranking.sort(
       (a, b) =>
         a.distance -
         b.distance
     );
 
     const awards =
-  state.teamCount === 2
-    ? [30, 10]
-    : [30, 10, 0];
+      state.teamCount === 2
+        ? [30, 10]
+        : [30, 10, 0];
 
-    results.forEach(
-      (result, place) => {
+    ranking.forEach(
+      (entry, place) => {
 
-        changeScore(
-          result.team,
-          awards[place]
-        );
+        if (
+          awards[place] > 0
+        ) {
+
+          changeScore(
+            entry.index,
+            awards[place]
+          );
+        }
       }
     );
 
     const bounds =
-      L.latLngBounds([
-        target,
-        ...guesses
-      ]);
+      L.latLngBounds(
+        [
+          [
+            location.lat,
+            location.lng
+          ],
+          ...guesses.map(
+            guess => [
+              guess.lat,
+              guess.lng
+            ]
+          )
+        ]
+      );
 
     map.fitBounds(
-      bounds.pad(0.25)
+      bounds,
+      {
+        padding: [60, 60]
+      }
     );
 
-    const resultsBox =
+    const results =
       $("#geo-results");
 
-    resultsBox.innerHTML =
-      `<h2>${location.name}</h2>`;
+    results.innerHTML = `
+      <h3>
+        ${escapeHtml(
+          location.name
+        )}
+      </h3>
+    `;
 
-    results.forEach(
-      (result, place) => {
+    ranking.forEach(
+      (entry, place) => {
 
         const row =
           document.createElement(
@@ -4509,23 +4543,26 @@ function initialiseGeoGuessr() {
             ${place + 1}.
             ${escapeHtml(
               state.teams[
-                result.team
+                entry.index
               ].name
             )}
           </strong>
 
           <span>
             ${Math.round(
-              result.distance
-            ).toLocaleString()} km
-          </span>
+              entry.distance
+            ).toLocaleString()}
+            km
 
-          <span>
-            +${awards[place]}
+            ${
+              awards[place] > 0
+                ? ` — +${awards[place]}`
+                : " — 0"
+            }
           </span>
         `;
 
-        resultsBox.appendChild(
+        results.appendChild(
           row
         );
       }
@@ -4540,18 +4577,20 @@ function initialiseGeoGuessr() {
       "primary-button";
 
     next.textContent =
-      round === 5
+      round ===
+      GEO_DATA.length - 1
         ? "FINISH GEOGUESSR"
         : "NEXT LOCATION";
 
     next.onclick = () => {
 
-      if (map) {
-        map.remove();
-        map = null;
-      }
+      map.remove();
+      map = null;
 
-      if (round === 5) {
+      if (
+        round ===
+        GEO_DATA.length - 1
+      ) {
 
         markGameComplete(
           "geoguessr"
@@ -4559,23 +4598,19 @@ function initialiseGeoGuessr() {
 
         returnToHub();
 
-      } else {
-
-        round += 1;
-
-        $("#geo-start-button")
-          .disabled = false;
-
-        renderRound();
+        return;
       }
+
+      round += 1;
+
+      renderRound();
     };
 
-    resultsBox.appendChild(next);
+    results.appendChild(next);
 
-    $("#geo-results")
-      .classList.remove(
-        "hidden"
-      );
+    results.classList.remove(
+      "hidden"
+    );
 
     playSfx(
       "reveal-sound"
@@ -4645,20 +4680,15 @@ const FEUD_ROUNDS = [
 
     answers: [
       ["Exercise", 30],
-      [
-        "Spend time with family / friends",
-        24
-      ],
+      ["Spend time with family / friends", 24],
       ["Gaming", 18],
-      [
-        "Go out for food / drinks",
-        13
-      ],
+      ["Go out for food / drinks", 13],
       ["Play music", 9],
       ["Gardening", 6]
     ]
   }
 ];
+
 
 const FAST_MONEY = [
 
@@ -5110,9 +5140,6 @@ function initialiseFamilyFeud() {
   function initialiseFastMoney(
     winner
   ) {
-
-    $(".feud-panel > *")
-      ?.classList.add;
 
     $("#feud-board")
       .classList.add("hidden");
