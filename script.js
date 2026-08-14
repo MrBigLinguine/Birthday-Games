@@ -1987,89 +1987,81 @@ const WHOS_DATA = [
   {
     name: "Logan Paul",
     silhouette:
-      "assets/images/whos-that/01-logan-paul-silhouette.png",
+      "assets/images/whos-that/01_LoganPaulSILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/01-logan-paul-reveal.png"
+      "assets/images/whos-that/01_LoganPaul_REVEAL.png"
   },
 
   {
     name: "MrBeast",
     silhouette:
-      "assets/images/whos-that/02-mrbeast-silhouette.png",
+      "assets/images/whos-that/02_MrBeast_SILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/02-mrbeast-reveal.png"
+      "assets/images/whos-that/02_MrBeast_REVEAL.png"
   },
 
   {
-    name:
-      "Cristiano Ronaldo",
+    name: "Cristiano Ronaldo",
     silhouette:
-      "assets/images/whos-that/03-cristiano-ronaldo-silhouette.png",
+      "assets/images/whos-that/03_Ronaldo_SILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/03-cristiano-ronaldo-reveal.png"
+      "assets/images/whos-that/03_Ronaldo_REVEAL.jpg"
   },
 
   {
-    name:
-      "Muhammad Ali",
+    name: "Muhammad Ali",
     silhouette:
-      "assets/images/whos-that/04-muhammad-ali-silhouette.png",
+      "assets/images/whos-that/04_MuhammedAli_SILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/04-muhammad-ali-reveal.png"
+      "assets/images/whos-that/04_MuhammedAli_REVEAL.png"
   },
 
   {
-    name:
-      "Danny DeVito",
+    name: "Danny DeVito",
     silhouette:
-      "assets/images/whos-that/05-danny-devito-silhouette.png",
+      "assets/images/whos-that/05_DannyDevito_SILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/05-danny-devito-reveal.png"
+      "assets/images/whos-that/05_DannyDevito_REVEAL.jpeg"
   },
 
   {
-    name:
-      "Robert Irwin",
+    name: "Robert Irwin",
     silhouette:
-      "assets/images/whos-that/06-robert-irwin-silhouette.png",
+      "assets/images/whos-that/06_RobertIrwin_SILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/06-robert-irwin-reveal.png"
+      "assets/images/whos-that/06_RobertIrwin_REVEAL.png"
   },
 
   {
-    name:
-      "Aunty Donna",
+    name: "Aunty Donna",
     silhouette:
-      "assets/images/whos-that/07-aunty-donna-silhouette.png",
+      "assets/images/whos-that/07_AuntieDonna_SILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/07-aunty-donna-reveal.png"
+      "assets/images/whos-that/07_AuntieDonna_REVEAL.png"
   },
 
   {
-    name:
-      "Banging Sangas",
+    name: "Banging Sangas",
     silhouette:
-      "assets/images/whos-that/08-banging-sangas-silhouette.png",
+      "assets/images/whos-that/08_BangingSangas_SILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/08-banging-sangas-reveal.png"
+      "assets/images/whos-that/08_BangingSangas_REVEAL.png"
   },
 
   {
-    name:
-      "Crocodile Dundee",
+    name: "Crocodile Dundee",
     silhouette:
-      "assets/images/whos-that/09-crocodile-dundee-silhouette.png",
+      "assets/images/whos-that/09_CrocodileDundee_SILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/09-crocodile-dundee-reveal.png"
+      "assets/images/whos-that/09_CrocodileDundee_REVEAL.jpeg"
   },
 
   {
-    name:
-      "Margot Robbie",
+    name: "Margot Robbie",
     silhouette:
-      "assets/images/whos-that/10-margot-robbie-silhouette.png",
+      "assets/images/whos-that/10_MargotRobbie_SILHOUETTE.png",
     reveal:
-      "assets/images/whos-that/10-margot-robbie-reveal.png"
+      "assets/images/whos-that/10_MargotRobbie_REVEAL.png"
   }
 ];
 
@@ -2322,121 +2314,104 @@ const REVIEW_DATA = [
   {
     title: "Jaws",
     stars: 2,
-    author:
-      "Shafrillas Productions",
+    author: "Shafrillas Productions",
     review:
       "The Meg (2018) is better AND it has Jason Statham innit. This movie fails cinema.",
     poster:
-      "assets/images/movie-reviews/01-jaws.png"
+      "assets/images/movie-reviews/jaws poster.avif"
   },
 
   {
     title: "The Matrix",
     stars: 1,
-    author:
-      "Kaho Matsui",
+    author: "Kaho Matsui",
     review:
       "Got scared at the bellybutton scene when I was 6 and then I ran outside crying and got stung by a bee in the yard. Awful experience. Dad yelled at me after that too. It was no good.",
     poster:
-      "assets/images/movie-reviews/02-the-matrix.png"
+      "assets/images/movie-reviews/matrix poster.jpg"
   },
 
   {
     title: "Gladiator",
     stars: 1,
-    author:
-      "Adambolt",
+    author: "Adambolt",
     review:
       "I was not entertained.",
     poster:
-      "assets/images/movie-reviews/03-gladiator.png"
+      "assets/images/movie-reviews/gladiator poster.jpg"
   },
 
   {
-    title:
-      "The Lion King",
+    title: "The Lion King",
     stars: 3,
-    author:
-      "Clownhead",
+    author: "Clownhead",
     review:
       "If only Bill added a gay meerkat with anxiety into the OG Hamlet. Could have had a real hit on his hands.",
     poster:
-      "assets/images/movie-reviews/04-the-lion-king.png"
+      "assets/images/movie-reviews/the lion king poster.jpg"
   },
 
   {
-    title:
-      "2001: A Space Odyssey",
+    title: "2001: A Space Odyssey",
     stars: 2,
-    author:
-      "Carter",
+    author: "Carter",
     review:
       "I am no film expert by any means, but this has got to be the most boring, anticlimactic and unremarkable movie I’ve ever seen. There is no real plot or characters. Nothing even remotely interesting happens after the beginning with the apes. 95% of the movie there is no dialogue. All of this could be made up for if it gave the audience something to contemplate, but it doesn’t. It’s astonishing to me that this is regarded as one of the best movies of all time.",
     poster:
-      "assets/images/movie-reviews/05-2001-a-space-odyssey.png"
+      "assets/images/movie-reviews/2001- A Space Odyssey Poster.jpg"
   },
 
   {
-    title:
-      "Pulp Fiction",
+    title: "Pulp Fiction",
     stars: 1,
-    author:
-      "Anyonebutsyndey",
+    author: "Anyonebutsyndey",
     review:
       "HE GOES BACK FOR THE POPTART. THE FUCKEN POPTART. HE WAS SO CLOSE TO BEING GOOD, SAFE, FINE, BUT NOOOO, HE NEEDS A POPTART. MOTHERFUCKEN BRUCE WILLIS POPTART-EATING ASS. FUCKEN POPTART. THE GODDAMNED POPTART. BRUCE WILLIS FUCKEN GRANDFATHER’S ASS-WATCH MOTHERFUCKER NEEDS A GOD DAMN POPTART?! ARE YOU KIDDING ME??? ZERO FUCKING STARS.",
     poster:
-      "assets/images/movie-reviews/06-pulp-fiction.png"
+      "assets/images/movie-reviews/pulp fiction poster.jpg"
   },
 
   {
     title:
       "The Lord of the Rings: The Fellowship of the Ring",
     stars: 1,
-    author:
-      "davem82",
+    author: "davem82",
     review:
       "Absolutely terrible. Three hours of people walking.",
     poster:
-      "assets/images/movie-reviews/07-lotr-fellowship.png"
+      "assets/images/movie-reviews/lotr poster.jpeg"
   },
 
   {
-    title:
-      "The Godfather",
+    title: "The Godfather",
     stars: 2,
-    author:
-      "Weed King",
+    author: "Weed King",
     review:
       "Justice for the horse they killed for that one scene!!!",
     poster:
-      "assets/images/movie-reviews/08-the-godfather.png"
+      "assets/images/movie-reviews/the godfather poster.jpg"
   },
 
   {
-    title:
-      "Fight Club",
+    title: "Fight Club",
     stars: 3,
-    author:
-      "Fraser Costen",
+    author: "Fraser Costen",
     review:
       "I actually wanted to learn how to make soap. Now I am being arrested on domestic terrorism charges.",
     poster:
-      "assets/images/movie-reviews/09-fight-club.png"
+      "assets/images/movie-reviews/fight club poster.jpg"
   },
 
   {
-    title:
-      "Forrest Gump",
+    title: "Forrest Gump",
     stars: 1,
-    author:
-      "Jed",
+    author: "Jed",
     review:
       "Awful yet effective piece of propaganda. Obey all orders blindly and you will be promptly rewarded. Disobey and fight back and you get AIDS and die.",
     poster:
-      "assets/images/movie-reviews/10-forrest-gump.png"
+      "assets/images/movie-reviews/forrest gump poster.jpg"
   }
 ];
-
 
 /* ============================================================
    MOVIE REVIEWS
@@ -4041,69 +4016,51 @@ function initialisePixelMovie() {
 const GEO_DATA = [
 
   {
-    name:
-      "Uluru, Northern Territory",
+    name: "Uluru, Northern Territory",
     image:
-      "assets/images/geoguessr/01-uluru.png",
-    lat:
-      -25.301444,
-    lng:
-      130.998151
+      "assets/images/geoguessr/1 Uluru.png",
+    lat: -25.301444,
+    lng: 130.998151
   },
 
   {
-    name:
-      "Niagara Falls, Canada",
+    name: "Niagara Falls, Canada",
     image:
-      "assets/images/geoguessr/02-niagara-falls.png",
-    lat:
-      43.0848518,
-    lng:
-      -79.0844662
+      "assets/images/geoguessr/02 Niagra Falls.png",
+    lat: 43.0848518,
+    lng: -79.0844662
   },
 
   {
-    name:
-      "Dubai, United Arab Emirates",
+    name: "Dubai, United Arab Emirates",
     image:
-      "assets/images/geoguessr/03-dubai.png",
-    lat:
-      25.2065062,
-    lng:
-      55.2433251
+      "assets/images/geoguessr/03 Dubai.png",
+    lat: 25.2065062,
+    lng: 55.2433251
   },
 
   {
-    name:
-      "Phuket, Thailand",
+    name: "Phuket, Thailand",
     image:
-      "assets/images/geoguessr/04-phuket.png",
-    lat:
-      7.893752,
-    lng:
-      98.296152
+      "assets/images/geoguessr/04 Phuket.png",
+    lat: 7.893752,
+    lng: 98.296152
   },
 
   {
-    name:
-      "Easter Island, Chile",
+    name: "Easter Island, Chile",
     image:
-      "assets/images/geoguessr/05-easter-island.png",
-    lat:
-      -27.1269102,
-    lng:
-      -109.2779372
+      "assets/images/geoguessr/05 Easter Island.png",
+    lat: -27.1269102,
+    lng: -109.2779372
   },
 
   {
-    name:
-      "Chernobyl / Pripyat, Ukraine",
+    name: "Chernobyl / Pripyat, Ukraine",
     image:
-      "assets/images/geoguessr/06-chernobyl.png",
-    lat:
-      51.4020348,
-    lng:
-      30.0523949
+      "assets/images/geoguessr/06 Chernobyl.png",
+    lat: 51.4020348,
+    lng: 30.0523949
   }
 ];
 
