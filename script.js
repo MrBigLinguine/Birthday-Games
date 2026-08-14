@@ -1858,36 +1858,64 @@ function openCategoryQuestion(
       "hidden"
     );
 
-    controls.innerHTML = "";
+    correctButton.classList.add("hidden");
+wrongButton.classList.add("hidden");
+revealButton.classList.add("hidden");
 
-    const backButton =
-      document.createElement(
-        "button"
-      );
+const oldBackButton =
+  document.getElementById(
+    "category-return-button"
+  );
 
-    backButton.className =
-      "primary-button";
+if (oldBackButton) {
+  oldBackButton.remove();
+}
 
-    backButton.type = "button";
+const backButton =
+  document.createElement("button");
 
-    backButton.textContent =
-      "RETURN TO BOARD";
+backButton.id =
+  "category-return-button";
 
-    backButton.onclick = () => {
+backButton.className =
+  "primary-button";
 
-      state.category.currentTurn =
-        (
-          state.category.currentTurn +
-          1
-        ) % state.teamCount;
+backButton.type =
+  "button";
 
-      saveState();
-      renderCategoryBoard();
-    };
+backButton.textContent =
+  "RETURN TO BOARD";
 
-    controls.appendChild(
-      backButton
-    );
+backButton.onclick = () => {
+
+  state.category.currentTurn =
+    (
+      state.category.currentTurn +
+      1
+    ) % state.teamCount;
+
+  backButton.remove();
+
+  correctButton.classList.remove(
+    "hidden"
+  );
+
+  wrongButton.classList.remove(
+    "hidden"
+  );
+
+  revealButton.classList.remove(
+    "hidden"
+  );
+
+  saveState();
+
+  renderCategoryBoard();
+};
+
+controls.appendChild(
+  backButton
+);
 
     saveState();
   }
