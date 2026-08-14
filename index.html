@@ -10,7 +10,7 @@
 
   <title>Untitled Games</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 
   <!-- Leaflet map styling for GeoGuessr -->
   <link
@@ -89,7 +89,6 @@
         </h2>
 
       </div>
-
 
       <div class="team-count-selector">
 
@@ -345,15 +344,12 @@
 
       <div class="game-grid">
 
-
         <button
           class="game-card"
           data-game="pub-trivia"
           type="button"
         >
-          <span class="game-number">
-            01
-          </span>
+          <span class="game-number">01</span>
 
           <span class="game-card-title">
             PUB TRIVIA
@@ -374,9 +370,7 @@
           data-game="category-trivia"
           type="button"
         >
-          <span class="game-number">
-            02
-          </span>
+          <span class="game-number">02</span>
 
           <span class="game-card-title">
             CATEGORY TRIVIA
@@ -397,9 +391,7 @@
           data-game="whos-that"
           type="button"
         >
-          <span class="game-number">
-            03
-          </span>
+          <span class="game-number">03</span>
 
           <span class="game-card-title">
             WHO'S THAT?
@@ -420,9 +412,7 @@
           data-game="movie-reviews"
           type="button"
         >
-          <span class="game-number">
-            04
-          </span>
+          <span class="game-number">04</span>
 
           <span class="game-card-title">
             MOVIE REVIEWS
@@ -443,9 +433,7 @@
           data-game="song-game"
           type="button"
         >
-          <span class="game-number">
-            05
-          </span>
+          <span class="game-number">05</span>
 
           <span class="game-card-title">
             SONG GAME
@@ -466,9 +454,7 @@
           data-game="switch-tennis"
           type="button"
         >
-          <span class="game-number">
-            06
-          </span>
+          <span class="game-number">06</span>
 
           <span class="game-card-title">
             SWITCH TENNIS
@@ -489,9 +475,7 @@
           data-game="pixel-movie"
           type="button"
         >
-          <span class="game-number">
-            07
-          </span>
+          <span class="game-number">07</span>
 
           <span class="game-card-title">
             PIXEL MOVIE
@@ -512,9 +496,7 @@
           data-game="geoguessr"
           type="button"
         >
-          <span class="game-number">
-            08
-          </span>
+          <span class="game-number">08</span>
 
           <span class="game-card-title">
             GEOGUESSR
@@ -535,9 +517,7 @@
           data-game="family-feud"
           type="button"
         >
-          <span class="game-number">
-            09
-          </span>
+          <span class="game-number">09</span>
 
           <span class="game-card-title">
             FAMILY FEUD
@@ -603,9 +583,7 @@
     </header>
 
 
-    <div
-      id="game-scoreboard-container"
-    >
+    <div id="game-scoreboard-container">
     </div>
 
 
@@ -613,12 +591,6 @@
       id="game-content"
       class="game-content"
     >
-
-      <!--
-        JavaScript will load the selected game's
-        interface into this section.
-      -->
-
     </main>
 
   </section>
@@ -804,9 +776,7 @@
             15
           </div>
 
-          <div
-            id="category-steal-team-buttons"
-          >
+          <div id="category-steal-team-buttons">
           </div>
 
         </div>
@@ -943,9 +913,7 @@
         >
         </div>
 
-        <blockquote
-          id="review-text"
-        >
+        <blockquote id="review-text">
         </blockquote>
 
         <p
@@ -967,9 +935,7 @@
           alt="Movie poster"
         >
 
-        <h2
-          id="review-movie-title"
-        >
+        <h2 id="review-movie-title">
         </h2>
 
       </div>
@@ -1034,9 +1000,7 @@
         class="private-betting-panel"
       >
 
-        <h3
-          id="betting-team-name"
-        >
+        <h3 id="betting-team-name">
         </h3>
 
         <p>
@@ -1449,9 +1413,7 @@
           30
         </div>
 
-        <div
-          id="fast-money-board"
-        >
+        <div id="fast-money-board">
         </div>
 
       </div>
@@ -1601,9 +1563,7 @@
           RENAME TEAMS
         </h3>
 
-        <div
-          id="host-team-name-controls"
-        >
+        <div id="host-team-name-controls">
         </div>
 
       </div>
@@ -1685,22 +1645,6 @@
        AUDIO
   ========================================================== -->
 
-  <!-- Home / menu music -->
-
-  <audio
-    id="menu-music"
-    loop
-    preload="auto"
-  >
-    <source
-      src="assets/audio/alex-morgan-neon-synthwave-drive-537447.mp3"
-      type="audio/mpeg"
-    >
-  </audio>
-
-
-  <!-- Song Game -->
-
   <audio
     id="song-game-audio"
     preload="auto"
@@ -1708,7 +1652,46 @@
   </audio>
 
 
-  <!-- General sound effects -->
+  <!-- Sound-effect hooks.
+       We will connect your exact audio files later. -->
+
+  <audio
+    id="team-buzz-sound"
+    preload="auto"
+  >
+  </audio>
+
+  <audio
+    id="feud-ding-sound"
+    preload="auto"
+  >
+  </audio>
+
+  <audio
+    id="feud-strike-sound"
+    preload="auto"
+  >
+  </audio>
+
+  <audio
+    id="feud-win-sound"
+    preload="auto"
+  >
+  </audio>
+
+  <audio
+    id="feud-theme-sound"
+    preload="auto"
+    loop
+  >
+  </audio>
+
+  <audio
+    id="tennis-music"
+    preload="auto"
+    loop
+  >
+  </audio>
 
   <audio
     id="correct-sound"
@@ -1775,12 +1758,11 @@
        JAVASCRIPT
   ========================================================== -->
 
-  <!-- Leaflet map library -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   ></script>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
 
 </body>
 </html>
