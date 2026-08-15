@@ -4099,7 +4099,7 @@ const SONG_DATA = [
       "ABBA",
 
     file:
-      "assets/audio/songs/Gimme Gimme Gimme.mp3"
+      "assets/audio/songs/Gimme! Gimme! Gimme!.mp3"
   },
 
   {
@@ -4113,7 +4113,7 @@ const SONG_DATA = [
       "The Black Eyed Peas",
 
     file:
-      "assets/audio/songs/Pump It.mp3"
+      "assets/audio/songs/Pump It .mp3"
   },
 
   {
@@ -4163,13 +4163,13 @@ const SONG_DATA = [
       "ONE HIT WONDERS",
 
     title:
-      "Mambo No. 5",
+  "Ice Ice Baby",
 
-    artist:
-      "Lou Bega",
+artist:
+  "Vanilla Ice",
 
-    file:
-      "assets/audio/songs/Mambo No. 5.mp3"
+file:
+  "assets/audio/songs/Ice Ice Baby.mp3"
   },
 
   {
@@ -4183,7 +4183,7 @@ const SONG_DATA = [
       "PSY",
 
     file:
-      "assets/audio/songs/Gangnam Style.mp3"
+      "assets/audio/songs/Gangdum Style.mp3"
   },
 
   {
@@ -4531,7 +4531,30 @@ function initialiseSongGame() {
       .classList.remove(
         "hidden"
       );
+const waveform =
+  $("#audio-waveform");
 
+waveform.innerHTML =
+  "";
+
+for (
+  let i = 0;
+  i < 22;
+  i++
+) {
+
+  const bar =
+    document.createElement(
+      "span"
+    );
+
+  bar.className =
+    "wave-bar";
+
+  waveform.appendChild(
+    bar
+  );
+}
 
     renderBuzzButtons();
   }
@@ -4558,17 +4581,35 @@ function initialiseSongGame() {
         restart: false
       }
     );
-  }
+  $("#vinyl-record")
+  ?.classList.add(
+    "spinning"
+  );
 
+$("#audio-waveform")
+  ?.classList.add(
+    "playing"
+  );
+}
+audio.onended =
+  () => {
 
+    $("#vinyl-record")
+      ?.classList.remove(
+        "spinning"
+      );
+
+    $("#audio-waveform")
+      ?.classList.remove(
+        "playing"
+      );
+  };
   $("#song-play-button")
     .onclick =
     playClip;
 
 
-  $("#song-replay-button")
-    .onclick =
-    playClip;
+  
 
 
   /* ============================================================
