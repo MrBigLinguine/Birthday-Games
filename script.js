@@ -3194,56 +3194,67 @@ function initialiseCategoryTrivia() {
 ============================================================ */
 
 const WHOS_THAT_DATA = [
+
   {
-    name: "Round 1",
+    name: "Logan Paul",
     image:
-      "assets/images/whos-that/1.png"
+      "assets/images/whos-that/01_LoganPaulSILHOUETTE.png"
   },
+
   {
-    name: "Round 2",
+    name: "MrBeast",
     image:
-      "assets/images/whos-that/2.png"
+      "assets/images/whos-that/02_MrBeast_SILHOUETTE.png"
   },
+
   {
-    name: "Round 3",
+    name: "Cristiano Ronaldo",
     image:
-      "assets/images/whos-that/3.png"
+      "assets/images/whos-that/03_Ronaldo_SILHOUETTE.png"
   },
+
   {
-    name: "Round 4",
+    name: "Muhammad Ali",
     image:
-      "assets/images/whos-that/4.png"
+      "assets/images/whos-that/04_MuhammedAli_SILHOUETTE.png"
   },
+
   {
-    name: "Round 5",
+    name: "Danny DeVito",
     image:
-      "assets/images/whos-that/5.png"
+      "assets/images/whos-that/05_DannyDevito_SILHOUETTE.png"
   },
+
   {
-    name: "Round 6",
+    name: "Robert Irwin",
     image:
-      "assets/images/whos-that/6.png"
+      "assets/images/whos-that/06_RobertIrwin_SILHOUETTE.png"
   },
+
   {
-    name: "Round 7",
+    name: "Aunty Donna",
     image:
-      "assets/images/whos-that/7.png"
+      "assets/images/whos-that/07_AuntieDonna_SILHOUETTE.png"
   },
+
   {
-    name: "Round 8",
+    name: "Banging Sangas",
     image:
-      "assets/images/whos-that/8.png"
+      "assets/images/whos-that/08_BangingSangas_SILHOUETTE.png"
   },
+
   {
-    name: "Round 9",
+    name: "Crocodile Dundee",
     image:
-      "assets/images/whos-that/9.png"
+      "assets/images/whos-that/09_CrocodileDundee_SILHOUETTE.png"
   },
+
   {
-    name: "Round 10",
+    name: "Margot Robbie",
     image:
-      "assets/images/whos-that/10.png"
+      "assets/images/whos-that/10_MargotRobbie_SILHOUETTE.png"
   }
+
 ];
 
 
