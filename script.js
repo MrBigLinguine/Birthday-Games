@@ -4209,15 +4209,26 @@ function initialiseSongGame() {
 
   let bettingTeam = 0;
 
-  let currentBets = [];
-
   let selectedWager =
     null;
+
+  let currentBets =
+    [];
+
+  let buzzedTeam =
+    null;
+
+  let lockedOutTeams =
+    new Set();
 
 
   const audio =
     $("#song-game-audio");
 
+
+  /* ============================================================
+     BEGIN ROUND
+  ============================================================ */
 
   function beginRound() {
 
@@ -4225,12 +4236,19 @@ function initialiseSongGame() {
       SONG_DATA[round];
 
 
-    currentBets = [];
-
     bettingTeam = 0;
 
     selectedWager =
       null;
+
+    currentBets =
+      [];
+
+    buzzedTeam =
+      null;
+
+    lockedOutTeams =
+      new Set();
 
 
     $("#song-round-number")
@@ -4249,13 +4267,19 @@ function initialiseSongGame() {
       );
 
 
-    $("#song-play-stage")
+    $("#song-round-controls")
       .classList.add(
         "hidden"
       );
 
 
     $("#song-answer")
+      .classList.add(
+        "hidden"
+      );
+
+
+    $("#song-next-button")
       .classList.add(
         "hidden"
       );
@@ -4281,6 +4305,10 @@ function initialiseSongGame() {
   }
 
 
+  /* ============================================================
+     WAGER BUTTONS 1–10
+  ============================================================ */
+
   function renderBetting() {
 
     const team =
@@ -4291,7 +4319,7 @@ function initialiseSongGame() {
 
     $("#betting-team-name")
       .textContent =
-      `${team.name} — PRIVATE WAGER`;
+      `${team.name} — CHOOSE YOUR WAGER`;
 
 
     const track =
@@ -4359,11 +4387,12 @@ function initialiseSongGame() {
               ".wager-button"
             )
             .forEach(
-              item => {
+              wagerButton => {
 
-                item.classList.remove(
-                  "selected"
-                );
+                wagerButton
+                  .classList.remove(
+                    "selected"
+                  );
               }
             );
 
@@ -4380,6 +4409,10 @@ function initialiseSongGame() {
     }
   }
 
+
+  /* ============================================================
+     LOCK WAGER
+  ============================================================ */
 
   $("#lock-wager-button")
     .onclick =
@@ -4444,16 +4477,16 @@ function initialiseSongGame() {
 
       } else {
 
-        beginSongStage();
+        beginPlayStage();
       }
     };
 
 
-  function beginSongStage() {
+  /* ============================================================
+     PLAY STAGE
+  ============================================================ */
 
-    const item =
-      SONG_DATA[round];
-
+  function beginPlayStage() {
 
     $("#song-private-betting")
       .classList.add(
@@ -4461,172 +4494,62 @@ function initialiseSongGame() {
       );
 
 
-    $("#song-play-stage")
+    $("#song-round-controls")
       .classList.remove(
         "hidden"
       );
 
 
-    const wagers =
-      $("#locked-wagers-display");
-
-
-    wagers.innerHTML =
-      "";
-
-
-    activeTeams()
-      .forEach(
-        (
-          team,
-          index
-        ) => {
-
-          const badge =
-            document.createElement(
-              "div"
-            );
-
-
-          badge.className =
-            "team-button";
-
-
-          badge.textContent =
-            `${team.name}: ${currentBets[index]}`;
-
-
-          wagers.appendChild(
-            badge
-          );
-        }
-      );
-
-
-    if (audio) {
-
-      audio.src =
-        item.file;
-
-      audio.load();
-    }
-
-
-    renderWaveform();
-
-    renderSongScoring();
-
-
-    $("#song-answer")
-      .classList.add(
-        "hidden"
-      );
+    renderBuzzButtons();
   }
 
 
-  function renderWaveform() {
+  /* ============================================================
+     PLAY / REPLAY
+  ============================================================ */
 
-    const wave =
-      $("#audio-waveform");
+  function playClip() {
 
-
-    if (!wave) {
+    if (!audio) {
       return;
     }
 
 
-    wave.innerHTML =
-      "";
+    audio.currentTime =
+      0;
 
 
-    for (
-      let i = 0;
-      i < 22;
-      i++
-    ) {
-
-      const bar =
-        document.createElement(
-          "span"
-        );
-
-
-      bar.className =
-        "wave-bar";
-
-
-      wave.appendChild(
-        bar
-      );
-    }
-  }
-
-
-  $("#play-song-button")
-    .onclick =
-    () => {
-
-      if (!audio) {
-        return;
+    safePlay(
+      audio,
+      {
+        restart: false
       }
-
-
-      audio.currentTime =
-        0;
-
-
-      safePlay(
-        audio,
-        {
-          restart: false
-        }
-      );
-
-
-      $("#vinyl-record")
-        ?.classList.add(
-          "spinning"
-        );
-
-
-      $("#audio-waveform")
-        ?.classList.add(
-          "playing"
-        );
-    };
-
-
-  if (audio) {
-
-    audio.onended =
-      () => {
-
-        $("#vinyl-record")
-          ?.classList.remove(
-            "spinning"
-          );
-
-
-        $("#audio-waveform")
-          ?.classList.remove(
-            "playing"
-          );
-      };
+    );
   }
 
 
-  function renderSongScoring() {
+  $("#song-play-button")
+    .onclick =
+    playClip;
 
-    const controls =
-      $("#song-result-controls");
+
+  $("#song-replay-button")
+    .onclick =
+    playClip;
 
 
-    controls.innerHTML =
+  /* ============================================================
+     TEAM BUZZERS
+  ============================================================ */
+
+  function renderBuzzButtons() {
+
+    const holder =
+      $("#song-team-buttons");
+
+
+    holder.innerHTML =
       "";
-
-
-    const scored =
-      new Set();
 
 
     activeTeams()
@@ -4636,215 +4559,202 @@ function initialiseSongGame() {
           index
         ) => {
 
-          const wrapper =
-            document.createElement(
-              "div"
-            );
-
-
-          wrapper.style.margin =
-            "12px";
-
-
-          const label =
-            document.createElement(
-              "strong"
-            );
-
-
-          label.textContent =
-            `${team.name} — BET ${currentBets[index]}`;
-
-
-          const breakLine =
-            document.createElement(
-              "br"
-            );
-
-
-          const full =
-            document.createElement(
-              "button"
-            );
-
-
-          full.type =
-            "button";
-
-
-          full.className =
-            "correct-button";
-
-
-          full.textContent =
-            "SONG + ARTIST";
-
-
-          const half =
-            document.createElement(
-              "button"
-            );
-
-
-          half.type =
-            "button";
-
-
-          half.className =
-            "secondary-button";
-
-
-          half.textContent =
-            "ONE CORRECT";
-
-
-          const zero =
-            document.createElement(
-              "button"
-            );
-
-
-          zero.type =
-            "button";
-
-
-          zero.className =
-            "wrong-button";
-
-
-          zero.textContent =
-            "WRONG";
-
-
-          function award(
-            type
-          ) {
-
-            if (
-              scored.has(
-                index
-              )
-            ) {
-              return;
-            }
-
-
-            scored.add(
+          if (
+            lockedOutTeams.has(
               index
-            );
-
-
-            const maximum =
-              currentBets[
-                index
-              ] * 10;
-
-
-            let points =
-              0;
-
-
-            if (
-              type ===
-              "full"
-            ) {
-
-              points =
-                maximum;
-
-            } else if (
-              type ===
-              "half"
-            ) {
-
-              points =
-                Math.floor(
-                  (
-                    maximum /
-                    2
-                  ) /
-                  10
-                ) * 10;
-            }
-
-
-            if (
-              points > 0
-            ) {
-
-              changeScore(
-                index,
-                points
-              );
-
-
-              flashCorrect();
-
-            } else {
-
-              flashWrong();
-            }
-
-
-            full.disabled =
-              true;
-
-            half.disabled =
-              true;
-
-            zero.disabled =
-              true;
-
-
-            if (
-              scored.size ===
-              state.teamCount
-            ) {
-
-              revealSongAnswer();
-            }
+            )
+          ) {
+            return;
           }
 
 
-          full.onclick =
+          const button =
+            document.createElement(
+              "button"
+            );
+
+
+          button.type =
+            "button";
+
+
+          button.className =
+            "team-button";
+
+
+          button.textContent =
+            `${team.name} BUZZ`;
+
+
+          button.onclick =
             () => {
-              award("full");
+
+              if (
+                buzzedTeam !==
+                null
+              ) {
+                return;
+              }
+
+
+              buzzedTeam =
+                index;
+
+
+              if (audio) {
+                audio.pause();
+              }
+
+
+              playSfx(
+                "team-buzz-sound",
+                0.62
+              );
+
+
+              showMarkingButtons(
+                index
+              );
             };
 
 
-          half.onclick =
-            () => {
-              award("half");
-            };
-
-
-          zero.onclick =
-            () => {
-              award("zero");
-            };
-
-
-          wrapper.append(
-            label,
-            breakLine,
-            full,
-            half,
-            zero
-          );
-
-
-          controls.appendChild(
-            wrapper
+          holder.appendChild(
+            button
           );
         }
       );
   }
 
 
-  function revealSongAnswer() {
+  /* ============================================================
+     CORRECT / WRONG
+  ============================================================ */
 
-    $("#song-answer .song-next-button")
-      ?.remove();
+  function showMarkingButtons(
+    teamIndex
+  ) {
+
+    const holder =
+      $("#song-team-buttons");
+
+
+    holder.innerHTML =
+      "";
+
+
+    const label =
+      document.createElement(
+        "div"
+      );
+
+
+    label.className =
+      "turn-indicator";
+
+
+    label.textContent =
+      `${state.teams[teamIndex].name} BUZZED — WAGER ${currentBets[teamIndex]}`;
+
+
+    const correct =
+      document.createElement(
+        "button"
+      );
+
+
+    correct.type =
+      "button";
+
+
+    correct.className =
+      "correct-button";
+
+
+    correct.textContent =
+      "CORRECT";
+
+
+    const wrong =
+      document.createElement(
+        "button"
+      );
+
+
+    wrong.type =
+      "button";
+
+
+    wrong.className =
+      "wrong-button";
+
+
+    wrong.textContent =
+      "WRONG";
+
+
+    correct.onclick =
+      () => {
+
+        const points =
+          currentBets[
+            teamIndex
+          ] * 10;
+
+
+        changeScore(
+          teamIndex,
+          points
+        );
+
+
+        flashCorrect();
+
+
+        revealAnswer();
+      };
+
+
+    wrong.onclick =
+      () => {
+
+        flashWrong();
+
+
+        lockedOutTeams.add(
+          teamIndex
+        );
+
+
+        buzzedTeam =
+          null;
+
+
+        renderBuzzButtons();
+      };
+
+
+    holder.append(
+      label,
+      correct,
+      wrong
+    );
+  }
+
+
+  /* ============================================================
+     REVEAL ANSWER
+  ============================================================ */
+
+  $("#song-reveal-button")
+    .onclick =
+    revealAnswer;
+
+
+  function revealAnswer() {
+
+    if (audio) {
+      audio.pause();
+    }
 
 
     const item =
@@ -4869,81 +4779,76 @@ function initialiseSongGame() {
       );
 
 
-    const next =
-      document.createElement(
-        "button"
+    $("#song-team-buttons")
+      .innerHTML =
+      "";
+
+
+    $("#song-next-button")
+      .classList.remove(
+        "hidden"
       );
 
 
-    next.type =
-      "button";
+    playSfx(
+      "reveal-sound",
+      0.58
+    );
+  }
 
 
-    next.className =
-      "primary-button song-next-button";
+  /* ============================================================
+     NEXT TRACK
+  ============================================================ */
+
+  $("#song-next-button")
+    .onclick =
+    () => {
+
+      if (audio) {
+
+        audio.pause();
+
+        audio.currentTime =
+          0;
+      }
 
 
-    next.textContent =
-      round ===
-      SONG_DATA.length - 1
-        ? "FINISH SONG GAME"
-        : "NEXT SONG";
-
-
-    next.onclick =
-      () => {
-
-        if (audio) {
-
-          audio.pause();
-
-          audio.currentTime =
-            0;
-        }
-
-
-        if (
-          round ===
-          SONG_DATA.length - 1
-        ) {
-
-          state.song.round =
-            SONG_DATA.length;
-
-
-          saveState();
-
-
-          markGameComplete(
-            "song-game"
-          );
-
-
-          returnToHub();
-
-          return;
-        }
-
-
-        round += 1;
-
+      if (
+        round ===
+        SONG_DATA.length - 1
+      ) {
 
         state.song.round =
-          round;
+          SONG_DATA.length;
 
 
         saveState();
 
 
-        beginRound();
-      };
+        markGameComplete(
+          "song-game"
+        );
 
 
-    $("#song-answer")
-      .appendChild(
-        next
-      );
-  }
+        returnToHub();
+
+        return;
+      }
+
+
+      round += 1;
+
+
+      state.song.round =
+        round;
+
+
+      saveState();
+
+
+      beginRound();
+    };
 
 
   beginRound();
