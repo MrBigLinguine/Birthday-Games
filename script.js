@@ -4931,18 +4931,15 @@ audio.onended =
 /* ============================================================
    SWITCH TENNIS
 ============================================================ */
-
 function initialiseTennis() {
 
   const container =
     $("#game-content");
 
-
   const fragment =
     cloneTemplate(
       "switch-tennis-template"
     );
-
 
   if (
     !container ||
@@ -4951,35 +4948,16 @@ function initialiseTennis() {
     return;
   }
 
-
   container.appendChild(
     fragment
   );
 
-
-  /*
-    Tennis is treated as its own
-    small tournament.
-
-    2 teams:
-    best of three matches.
-
-    3 teams:
-    round robin.
-  */
-
-
   state.tennis = {
-    wins:
-      [0, 0, 0],
-
-    matchIndex:
-      0
+    wins: [0, 0, 0],
+    matchIndex: 0
   };
 
-
   let matches;
-
 
   if (
     state.teamCount === 2
@@ -5001,204 +4979,40 @@ function initialiseTennis() {
   }
 
 
-  function render() {
-
-    const index =
-      state.tennis
-        .matchIndex;
-
-
-    if (
-      index >=
-      matches.length
-    ) {
-
-      renderFinalStandings();
-
-      return;
-    }
-
-
-    const [
-      teamA,
-      teamB
-    ] =
-      matches[index];
-
-
-    $("#tennis-match-display")
-      .innerHTML = `
-        ${escapeHtml(
-          state.teams[
-            teamA
-          ].name
-        )}
-
-        <span>
-          VS
-        </span>
-
-        ${escapeHtml(
-          state.teams[
-            teamB
-          ].name
-        )}
-      `;
-
-
-    renderWinnerButtons(
-      teamA,
-      teamB
-    );
-
-
-    renderStandings();
-  }
-
-
-  /* ------------------------------------------------------------
-     WINNER BUTTONS
-  ------------------------------------------------------------ */
-
-  function renderWinnerButtons(
-    teamA,
-    teamB
-  ) {
-
-    const holder =
-      $("#tennis-win-buttons");
-
-
-    holder.innerHTML = "";
-
-
-    [
-      teamA,
-      teamB
-    ]
-    .forEach(
-      teamIndex => {
-
-        const button =
-          document.createElement(
-            "button"
-          );
-
-
-        button.type =
-          "button";
-
-
-        button.className =
-          "team-button";
-
-
-        button.textContent =
-          `${state.teams[
-            teamIndex
-          ].name} WON`;
-
-
-        button.onclick =
-          () => {
-
-            state.tennis
-              .wins[
-                teamIndex
-              ] += 1;
-
-
-            state.tennis
-              .matchIndex += 1;
-
-
-            /*
-              Tennis winner gets +10
-              on the overall scoreboard
-              for each match.
-            */
-
-            changeScore(
-              teamIndex,
-              10
-            );
-
-
-            flashCorrect();
-
-
-            saveState();
-
-
-            render();
-          };
-
-
-        holder.appendChild(
-          button
-        );
-      }
-    );
-  }
-
-
-  /* ------------------------------------------------------------
-     STANDINGS
-  ------------------------------------------------------------ */
-
   function renderStandings() {
 
-    const holder =
+    const standings =
       $("#tennis-standings");
 
-
-    holder.innerHTML = "";
-
+    standings.innerHTML =
+      "<h3>STANDINGS</h3>";
 
     activeTeams()
       .forEach(
-        (
-          team,
-          index
-        ) => {
+        (team, index) => {
 
           const row =
             document.createElement(
               "div"
             );
 
-
           row.className =
             "tennis-standing-row";
 
-
           row.innerHTML = `
-            <div class="tennis-standing-team">
+            <span>
               ${escapeHtml(
                 team.name
               )}
-            </div>
+            </span>
 
-            <div class="tennis-standing-wins">
-              ${
-                state.tennis
-                  .wins[
-                    index
-                  ]
-              }
-              WIN${
-                state.tennis
-                  .wins[
-                    index
-                  ] === 1
-                  ? ""
-                  : "S"
-              }
-            </div>
+            <strong>
+              ${state.tennis.wins[index]}
+              WINS
+            </strong>
           `;
 
-
-          holder.appendChild(
+          standings.appendChild(
             row
           );
         }
@@ -5206,29 +5020,134 @@ function initialiseTennis() {
   }
 
 
-  /* ------------------------------------------------------------
-     TOURNAMENT COMPLETE
-  ------------------------------------------------------------ */
+  function render() {
 
-  function renderFinalStandings() {
+    const index =
+      state.tennis.matchIndex;
 
-    $("#tennis-match-display")
-      .textContent =
-      "TOURNAMENT COMPLETE";
+    const match =
+      matches[index];
 
+    const display =
+      $("#tennis-match-display");
 
-    $("#tennis-win-buttons")
-      .innerHTML =
+    const winButtons =
+      $("#tennis-win-buttons");
+
+    const finishButton =
+      $("#finish-tennis-button");
+
+    winButtons.innerHTML =
       "";
 
 
-    renderStandings();
+    if (!match) {
+
+      display.innerHTML = `
+        <strong>
+          TOURNAMENT COMPLETE
+        </strong>
+        <br><br>
+        Select FINISH TOURNAMENT
+        to crown the winner.
+      `;
+
+      finishButton
+        .classList.remove(
+          "hidden"
+        );
+
+      renderStandings();
+
+      return;
+    }
 
 
-    $("#finish-tennis-button")
-      .classList.remove(
+    finishButton
+      .classList.add(
         "hidden"
       );
+
+
+    const teamA =
+      match[0];
+
+    const teamB =
+      match[1];
+
+
+    display.innerHTML = `
+      <strong>
+        MATCH ${index + 1}
+        / ${matches.length}
+      </strong>
+
+      <br><br>
+
+      ${escapeHtml(
+        state.teams[
+          teamA
+        ].name
+      )}
+
+      <span>
+        VS
+      </span>
+
+      ${escapeHtml(
+        state.teams[
+          teamB
+        ].name
+      )}
+    `;
+
+
+    [teamA, teamB]
+      .forEach(
+        teamIndex => {
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+          button.type =
+            "button";
+
+          button.className =
+            "team-button";
+
+          button.dataset.team =
+            teamIndex + 1;
+
+          button.textContent =
+            `${state.teams[
+              teamIndex
+            ].name} WINS`;
+
+          button.onclick =
+            () => {
+
+              state.tennis.wins[
+                teamIndex
+              ] += 1;
+
+              state.tennis.matchIndex +=
+                1;
+
+              saveState();
+
+              render();
+            };
+
+          winButtons.appendChild(
+            button
+          );
+        }
+      );
+
+
+    renderStandings();
   }
 
 
@@ -5236,23 +5155,80 @@ function initialiseTennis() {
     .onclick =
     () => {
 
+      if (
+        state.tennis.matchIndex <
+        matches.length
+      ) {
+        return;
+      }
+
+
+      const entries =
+        activeTeams()
+          .map(
+            (team, index) => ({
+              index,
+              wins:
+                state.tennis.wins[
+                  index
+                ]
+            })
+          )
+          .sort(
+            (a, b) =>
+              b.wins -
+              a.wins
+          );
+
+
+      let winner =
+        entries[0].index;
+
+
+      if (
+        entries.length > 1 &&
+        entries[0].wins ===
+        entries[1].wins
+      ) {
+
+        const answer =
+          prompt(
+            `TIEBREAK! Enter the winning team number (1-${state.teamCount}):`
+          );
+
+        const selected =
+          Number(answer) - 1;
+
+        if (
+          selected < 0 ||
+          selected >=
+            state.teamCount
+        ) {
+          return;
+        }
+
+        winner =
+          selected;
+      }
+
+
+      changeScore(
+        winner,
+        10
+      );
+
       markGameComplete(
         "switch-tennis"
       );
 
+      saveState();
+
+      alert(
+        `${state.teams[winner].name} wins King of the Court! +10 points`
+      );
 
       returnToHub();
     };
-
-
-  /*
-    Hide until matches are finished.
-  */
-
-  $("#finish-tennis-button")
-    .classList.add(
-      "hidden"
-    );
 
 
   render();
