@@ -3198,65 +3198,84 @@ const WHOS_THAT_DATA = [
   {
     name: "Logan Paul",
     image:
-      "assets/images/whos-that/01_LoganPaulSILHOUETTE.png"
+      "assets/images/whos-that/01_LoganPaulSILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/01_LoganPaul_REVEAL.png"
   },
 
   {
     name: "MrBeast",
     image:
-      "assets/images/whos-that/02_MrBeast_SILHOUETTE.png"
+      "assets/images/whos-that/02_MrBeast_SILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/02_MrBeast_REVEAL.png"
   },
 
   {
     name: "Cristiano Ronaldo",
     image:
-      "assets/images/whos-that/03_Ronaldo_SILHOUETTE.png"
+      "assets/images/whos-that/03_Ronaldo_SILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/03_Ronaldo_REVEAL.jpg"
   },
 
   {
     name: "Muhammad Ali",
     image:
-      "assets/images/whos-that/04_MuhammedAli_SILHOUETTE.png"
+      "assets/images/whos-that/04_MuhammedAli_SILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/04_MuhammedAli_REVEAL.png"
   },
 
   {
     name: "Danny DeVito",
     image:
-      "assets/images/whos-that/05_DannyDevito_SILHOUETTE.png"
+      "assets/images/whos-that/05_DannyDevito_SILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/05_DannyDevito_REVEAL.jpeg"
   },
 
   {
     name: "Robert Irwin",
     image:
-      "assets/images/whos-that/06_RobertIrwin_SILHOUETTE.png"
+      "assets/images/whos-that/06_RobertIrwin_SILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/06_RobertIrwin_REVEAL.png"
   },
 
   {
     name: "Aunty Donna",
     image:
-      "assets/images/whos-that/07_AuntieDonna_SILHOUETTE.png"
+      "assets/images/whos-that/07_AuntieDonna_SILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/07_AuntieDonna_REVEAL.png"
   },
 
   {
     name: "Banging Sangas",
     image:
-      "assets/images/whos-that/08_BangingSangas_SILHOUETTE.png"
+      "assets/images/whos-that/08_BangingSangas_SILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/08_BangingSangas_REVEAL.png"
   },
 
   {
     name: "Crocodile Dundee",
     image:
-      "assets/images/whos-that/09_CrocodileDundee_SILHOUETTE.png"
+      "assets/images/whos-that/09_CrocodileDundee_SILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/09_CrocodileDundee_REVEAL.jpeg"
   },
 
   {
     name: "Margot Robbie",
     image:
-      "assets/images/whos-that/10_MargotRobbie_SILHOUETTE.png"
+      "assets/images/whos-that/10_MargotRobbie_SILHOUETTE.png",
+    reveal:
+      "assets/images/whos-that/10_MargotRobbie_REVEAL.png"
   }
 
 ];
-
 
 /* ============================================================
    WHO'S THAT
@@ -3473,7 +3492,14 @@ function initialiseWhosThat() {
 
 
       timer?.stop();
+const item =
+  WHOS_THAT_DATA[
+    round
+  ];
 
+$("#whos-image")
+  .src =
+  item.reveal;
 
       changeScore(
         buzzedTeam,
@@ -3525,7 +3551,14 @@ function initialiseWhosThat() {
     () => {
 
       timer?.stop();
+const item =
+  WHOS_THAT_DATA[
+    round
+  ];
 
+$("#whos-image")
+  .src =
+  item.reveal;
 
       $("#whos-reveal-name")
         .classList.remove(
