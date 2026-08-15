@@ -8,9 +8,9 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Untitled Games</title>
+  <title>Mental Combat</title>
 
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=4">
 
   <!-- Leaflet map styling for GeoGuessr -->
   <link
@@ -29,6 +29,7 @@
     <div class="scanlines"></div>
     <div class="crt-glow"></div>
     <div class="retro-grid"></div>
+    <div class="pixel-noise"></div>
   </div>
 
 
@@ -40,30 +41,22 @@
 
     <div class="title-screen-inner">
 
-      <p class="eyebrow">
-        PRESENTS
-      </p>
-
-      <h1 class="main-title">
-        UNTITLED
-        <span>GAMES</span>
+      <h1 class="main-title mental-combat-title" aria-label="Mental Combat">
+        MENTAL
+        <span>COMBAT</span>
       </h1>
 
-      <p class="title-subtitle">
-        ONE NIGHT. NINE GAMES. ONE CHAMPION.
+      <p class="gauntlet-text" data-text="ENTER THE GAUNTLET">
+        ENTER THE GAUNTLET
       </p>
 
       <button
         id="press-start-button"
-        class="primary-button huge-button"
+        class="primary-button huge-button combat-start-button"
         type="button"
       >
         PRESS START
       </button>
-
-      <p class="blink-text">
-        INSERT COMPETITIVENESS TO CONTINUE
-      </p>
 
     </div>
 
@@ -177,447 +170,524 @@
     </div>
 
   </section>
-
-
   <!-- =========================================================
-       MAIN GAME HUB
-  ========================================================== -->
+     MAIN GAME HUB
+========================================================== -->
 
-  <section id="hub-screen" class="screen">
+<section id="hub-screen" class="screen">
 
-    <header class="game-header">
+  <header class="game-header">
 
-      <button
-        id="host-button"
-        class="small-button"
-        type="button"
-      >
-        HOST
-      </button>
+    <button
+      id="host-button"
+      class="small-button"
+      type="button"
+    >
+      HOST
+    </button>
 
-      <div class="hub-logo">
-        UNTITLED GAMES
-      </div>
+    <div class="hub-logo">
+      MENTAL COMBAT
+    </div>
 
-      <div id="games-complete-counter">
-        0 / 9 COMPLETE
-      </div>
+    <div id="games-complete-counter">
+      0 / 9 COMPLETE
+    </div>
 
-    </header>
+  </header>
 
 
-    <!-- MASTER SCOREBOARD -->
+  <!-- MASTER SCOREBOARD -->
+
+  <div
+    id="master-scoreboard"
+    class="scoreboard"
+  >
 
     <div
-      id="master-scoreboard"
-      class="scoreboard"
+      class="score-card team-1-card"
+      data-team="1"
     >
 
-      <div
-        class="score-card team-1-card"
-        data-team="1"
-      >
-
-        <div class="score-team-name">
-          Team 1
-        </div>
-
-        <div class="score-controls">
-
-          <button
-            class="manual-score-button"
-            data-team="1"
-            data-change="-10"
-            type="button"
-          >
-            −10
-          </button>
-
-          <span
-            class="score-value"
-            id="score-team-1"
-          >
-            0
-          </span>
-
-          <button
-            class="manual-score-button"
-            data-team="1"
-            data-change="10"
-            type="button"
-          >
-            +10
-          </button>
-
-        </div>
-
+      <div class="score-team-name">
+        Team 1
       </div>
 
+      <div class="score-controls">
 
-      <div
-        class="score-card team-2-card"
-        data-team="2"
-      >
+        <button
+          class="manual-score-button"
+          data-team="1"
+          data-change="-10"
+          type="button"
+        >
+          −10
+        </button>
 
-        <div class="score-team-name">
-          Team 2
-        </div>
+        <span
+          class="score-value"
+          id="score-team-1"
+        >
+          0
+        </span>
 
-        <div class="score-controls">
-
-          <button
-            class="manual-score-button"
-            data-team="2"
-            data-change="-10"
-            type="button"
-          >
-            −10
-          </button>
-
-          <span
-            class="score-value"
-            id="score-team-2"
-          >
-            0
-          </span>
-
-          <button
-            class="manual-score-button"
-            data-team="2"
-            data-change="10"
-            type="button"
-          >
-            +10
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="score-card team-3-card"
-        data-team="3"
-      >
-
-        <div class="score-team-name">
-          Team 3
-        </div>
-
-        <div class="score-controls">
-
-          <button
-            class="manual-score-button"
-            data-team="3"
-            data-change="-10"
-            type="button"
-          >
-            −10
-          </button>
-
-          <span
-            class="score-value"
-            id="score-team-3"
-          >
-            0
-          </span>
-
-          <button
-            class="manual-score-button"
-            data-team="3"
-            data-change="10"
-            type="button"
-          >
-            +10
-          </button>
-
-        </div>
+        <button
+          class="manual-score-button"
+          data-team="1"
+          data-change="10"
+          type="button"
+        >
+          +10
+        </button>
 
       </div>
 
     </div>
 
 
-    <!-- GAME GRID -->
+    <div
+      class="score-card team-2-card"
+      data-team="2"
+    >
 
-    <main class="hub-content">
+      <div class="score-team-name">
+        Team 2
+      </div>
 
-      <div class="game-grid">
+      <div class="score-controls">
 
         <button
-          class="game-card"
-          data-game="pub-trivia"
+          class="manual-score-button"
+          data-team="2"
+          data-change="-10"
           type="button"
         >
-          <span class="game-number">01</span>
-
-          <span class="game-card-title">
-            PUB TRIVIA
-          </span>
-
-          <span class="game-card-subtitle">
-            GENERAL KNOWLEDGE
-          </span>
-
-          <span class="completion-badge">
-            ✓ COMPLETE
-          </span>
+          −10
         </button>
 
+        <span
+          class="score-value"
+          id="score-team-2"
+        >
+          0
+        </span>
 
         <button
-          class="game-card"
-          data-game="category-trivia"
+          class="manual-score-button"
+          data-team="2"
+          data-change="10"
           type="button"
         >
-          <span class="game-number">02</span>
-
-          <span class="game-card-title">
-            CATEGORY TRIVIA
-          </span>
-
-          <span class="game-card-subtitle">
-            PICK YOUR POISON
-          </span>
-
-          <span class="completion-badge">
-            ✓ COMPLETE
-          </span>
-        </button>
-
-
-        <button
-          class="game-card"
-          data-game="whos-that"
-          type="button"
-        >
-          <span class="game-number">03</span>
-
-          <span class="game-card-title">
-            WHO'S THAT?
-          </span>
-
-          <span class="game-card-subtitle">
-            SILHOUETTE SHOWDOWN
-          </span>
-
-          <span class="completion-badge">
-            ✓ COMPLETE
-          </span>
-        </button>
-
-
-        <button
-          class="game-card"
-          data-game="movie-reviews"
-          type="button"
-        >
-          <span class="game-number">04</span>
-
-          <span class="game-card-title">
-            MOVIE REVIEWS
-          </span>
-
-          <span class="game-card-subtitle">
-            TERRIBLE TAKES
-          </span>
-
-          <span class="completion-badge">
-            ✓ COMPLETE
-          </span>
-        </button>
-
-
-        <button
-          class="game-card"
-          data-game="song-game"
-          type="button"
-        >
-          <span class="game-number">05</span>
-
-          <span class="game-card-title">
-            SONG GAME
-          </span>
-
-          <span class="game-card-subtitle">
-            BET BIG. LISTEN CLOSE.
-          </span>
-
-          <span class="completion-badge">
-            ✓ COMPLETE
-          </span>
-        </button>
-
-
-        <button
-          class="game-card"
-          data-game="switch-tennis"
-          type="button"
-        >
-          <span class="game-number">06</span>
-
-          <span class="game-card-title">
-            SWITCH TENNIS
-          </span>
-
-          <span class="game-card-subtitle">
-            KING OF THE COURT
-          </span>
-
-          <span class="completion-badge">
-            ✓ COMPLETE
-          </span>
-        </button>
-
-
-        <button
-          class="game-card"
-          data-game="pixel-movie"
-          type="button"
-        >
-          <span class="game-number">07</span>
-
-          <span class="game-card-title">
-            PIXEL MOVIE
-          </span>
-
-          <span class="game-card-subtitle">
-            LOCK IT IN
-          </span>
-
-          <span class="completion-badge">
-            ✓ COMPLETE
-          </span>
-        </button>
-
-
-        <button
-          class="game-card"
-          data-game="geoguessr"
-          type="button"
-        >
-          <span class="game-number">08</span>
-
-          <span class="game-card-title">
-            GEOGUESSR
-          </span>
-
-          <span class="game-card-subtitle">
-            WHERE IN THE WORLD?
-          </span>
-
-          <span class="completion-badge">
-            ✓ COMPLETE
-          </span>
-        </button>
-
-
-        <button
-          class="game-card final-game-card"
-          data-game="family-feud"
-          type="button"
-        >
-          <span class="game-number">09</span>
-
-          <span class="game-card-title">
-            FAMILY FEUD
-          </span>
-
-          <span class="game-card-subtitle">
-            THE FINAL SHOWDOWN
-          </span>
-
-          <span class="completion-badge">
-            ✓ COMPLETE
-          </span>
+          +10
         </button>
 
       </div>
 
-
-      <button
-        id="final-results-button"
-        class="primary-button final-results-button"
-        type="button"
-        disabled
-      >
-        FINAL RESULTS
-      </button>
-
-    </main>
-
-  </section>
-
-
-  <!-- =========================================================
-       SHARED GAME SCREEN
-  ========================================================== -->
-
-  <section id="game-screen" class="screen">
-
-    <header class="game-header">
-
-      <button
-        id="return-to-hub-button"
-        class="small-button"
-        type="button"
-      >
-        ← MENU
-      </button>
-
-      <div
-        id="current-game-title"
-        class="hub-logo"
-      >
-        GAME
-      </div>
-
-      <button
-        id="game-sound-button"
-        class="small-button"
-        type="button"
-      >
-        SOUND ON
-      </button>
-
-    </header>
-
-
-    <div id="game-scoreboard-container">
     </div>
 
 
-    <main
-      id="game-content"
-      class="game-content"
+    <div
+      class="score-card team-3-card"
+      data-team="3"
     >
-    </main>
 
-  </section>
+      <div class="score-team-name">
+        Team 3
+      </div>
+
+      <div class="score-controls">
+
+        <button
+          class="manual-score-button"
+          data-team="3"
+          data-change="-10"
+          type="button"
+        >
+          −10
+        </button>
+
+        <span
+          class="score-value"
+          id="score-team-3"
+        >
+          0
+        </span>
+
+        <button
+          class="manual-score-button"
+          data-team="3"
+          data-change="10"
+          type="button"
+        >
+          +10
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 
 
-  <!-- =========================================================
-       PUB TRIVIA TEMPLATE
-  ========================================================== -->
+  <!-- GAME GRID -->
 
-  <template id="pub-trivia-template">
+  <main class="hub-content">
 
-    <div class="game-panel pub-trivia-panel">
+    <div class="game-grid">
 
-      <div class="round-counter">
-        QUESTION
-        <span id="pub-question-number">1</span>
-        / 10
+      <button
+        class="game-card"
+        data-game="pub-trivia"
+        type="button"
+      >
+        <span class="game-number">
+          01
+        </span>
+
+        <span class="game-card-title">
+          PUB TRIVIA
+        </span>
+
+        <span class="completion-badge">
+          ✓ COMPLETE
+        </span>
+      </button>
+
+
+      <button
+        class="game-card"
+        data-game="category-trivia"
+        type="button"
+      >
+        <span class="game-number">
+          02
+        </span>
+
+        <span class="game-card-title">
+          CATEGORY TRIVIA
+        </span>
+
+        <span class="completion-badge">
+          ✓ COMPLETE
+        </span>
+      </button>
+
+
+      <button
+        class="game-card"
+        data-game="whos-that"
+        type="button"
+      >
+        <span class="game-number">
+          03
+        </span>
+
+        <span class="game-card-title">
+          WHO'S THAT?
+        </span>
+
+        <span class="completion-badge">
+          ✓ COMPLETE
+        </span>
+      </button>
+
+
+      <button
+        class="game-card"
+        data-game="movie-reviews"
+        type="button"
+      >
+        <span class="game-number">
+          04
+        </span>
+
+        <span class="game-card-title">
+          MOVIE REVIEWS
+        </span>
+
+        <span class="completion-badge">
+          ✓ COMPLETE
+        </span>
+      </button>
+
+
+      <button
+        class="game-card"
+        data-game="song-game"
+        type="button"
+      >
+        <span class="game-number">
+          05
+        </span>
+
+        <span class="game-card-title">
+          SONG GAME
+        </span>
+
+        <span class="completion-badge">
+          ✓ COMPLETE
+        </span>
+      </button>
+
+
+      <button
+        class="game-card"
+        data-game="switch-tennis"
+        type="button"
+      >
+        <span class="game-number">
+          06
+        </span>
+
+        <span class="game-card-title">
+          SWITCH TENNIS
+        </span>
+
+        <span class="completion-badge">
+          ✓ COMPLETE
+        </span>
+      </button>
+
+
+      <button
+        class="game-card"
+        data-game="pixel-movie"
+        type="button"
+      >
+        <span class="game-number">
+          07
+        </span>
+
+        <span class="game-card-title">
+          PIXEL MOVIE
+        </span>
+
+        <span class="completion-badge">
+          ✓ COMPLETE
+        </span>
+      </button>
+
+
+      <button
+        class="game-card"
+        data-game="geoguessr"
+        type="button"
+      >
+        <span class="game-number">
+          08
+        </span>
+
+        <span class="game-card-title">
+          GEOGUESSR
+        </span>
+
+        <span class="completion-badge">
+          ✓ COMPLETE
+        </span>
+      </button>
+
+
+      <button
+        class="game-card final-game-card"
+        data-game="family-feud"
+        type="button"
+      >
+        <span class="game-number">
+          09
+        </span>
+
+        <span class="game-card-title">
+          FAMILY FEUD
+        </span>
+
+        <span class="completion-badge">
+          ✓ COMPLETE
+        </span>
+      </button>
+
+    </div>
+
+
+    <button
+      id="final-results-button"
+      class="primary-button final-results-button"
+      type="button"
+      disabled
+    >
+      FINAL RESULTS
+    </button>
+
+  </main>
+
+</section>
+
+
+<!-- =========================================================
+     SHARED GAME SCREEN
+========================================================== -->
+
+<section id="game-screen" class="screen">
+
+  <header class="game-header">
+
+    <button
+      id="return-to-hub-button"
+      class="small-button"
+      type="button"
+    >
+      ← MENU
+    </button>
+
+    <div
+      id="current-game-title"
+      class="hub-logo"
+    >
+      GAME
+    </div>
+
+    <button
+      id="game-sound-button"
+      class="small-button"
+      type="button"
+    >
+      SOUND ON
+    </button>
+
+  </header>
+
+
+  <div id="game-scoreboard-container">
+  </div>
+
+
+  <main
+    id="game-content"
+    class="game-content"
+  >
+  </main>
+
+</section>
+<!-- =========================================================
+     PUB TRIVIA TEMPLATE
+========================================================== -->
+
+<template id="pub-trivia-template">
+
+  <div class="game-panel pub-trivia-panel">
+
+    <div class="round-counter">
+      QUESTION
+      <span id="pub-question-number">1</span>
+      / 10
+    </div>
+
+    <div
+      id="pub-question"
+      class="big-question"
+    >
+    </div>
+
+    <div
+      id="pub-answer-section"
+      class="answer-section hidden"
+    >
+
+      <p class="answer-label">
+        ANSWER
+      </p>
+
+      <h3 id="pub-answer">
+      </h3>
+
+      <div class="why-box">
+
+        <span>
+          WHY?
+        </span>
+
+        <p id="pub-explanation">
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="game-controls">
+
+      <button
+        id="pub-reveal-button"
+        class="primary-button"
+        type="button"
+      >
+        REVEAL ANSWER
+      </button>
+
+      <button
+        id="pub-next-button"
+        class="secondary-button hidden"
+        type="button"
+      >
+        NEXT QUESTION
+      </button>
+
+    </div>
+
+  </div>
+
+</template>
+
+
+<!-- =========================================================
+     CATEGORY TRIVIA TEMPLATE
+========================================================== -->
+
+<template id="category-trivia-template">
+
+  <div class="game-panel category-panel">
+
+    <div
+      id="category-board"
+      class="category-board"
+    >
+    </div>
+
+    <div
+      id="category-question-view"
+      class="category-question-view hidden"
+    >
+
+      <div
+        id="category-turn-indicator"
+        class="turn-indicator"
+      >
       </div>
 
       <div
-        id="pub-question"
+        id="category-timer"
+        class="timer-display"
+      >
+        30
+      </div>
+
+      <div
+        id="category-question"
         class="big-question"
       >
       </div>
 
       <div
-        id="pub-answer-section"
+        id="category-question-image-wrap"
+        class="category-question-image-wrap hidden"
+      >
+        <img
+          id="category-question-image"
+          src=""
+          alt="Category trivia image"
+        >
+      </div>
+
+      <div
+        id="category-answer-section"
         class="answer-section hidden"
       >
 
@@ -625,7 +695,7 @@
           ANSWER
         </p>
 
-        <h3 id="pub-answer">
+        <h3 id="category-answer">
         </h3>
 
         <div class="why-box">
@@ -634,217 +704,20 @@
             WHY?
           </span>
 
-          <p id="pub-explanation">
+          <p id="category-explanation">
           </p>
 
         </div>
 
       </div>
 
-      <div class="game-controls">
+      <div
+        id="category-host-controls"
+        class="game-controls"
+      >
 
         <button
-          id="pub-reveal-button"
-          class="primary-button"
-          type="button"
-        >
-          REVEAL ANSWER
-        </button>
-
-        <button
-          id="pub-next-button"
-          class="secondary-button hidden"
-          type="button"
-        >
-          NEXT QUESTION
-        </button>
-
-      </div>
-
-    </div>
-
-  </template>
-
-
-  <!-- =========================================================
-       CATEGORY TRIVIA TEMPLATE
-  ========================================================== -->
-
-  <template id="category-trivia-template">
-
-    <div class="game-panel category-panel">
-
-      <div
-        id="category-board"
-        class="category-board"
-      >
-      </div>
-
-      <div
-        id="category-question-view"
-        class="category-question-view hidden"
-      >
-
-        <div
-          id="category-turn-indicator"
-          class="turn-indicator"
-        >
-        </div>
-
-        <div
-          id="category-timer"
-          class="timer-display"
-        >
-          30
-        </div>
-
-        <div
-          id="category-question"
-          class="big-question"
-        >
-        </div>
-
-        <div
-          id="category-answer-section"
-          class="answer-section hidden"
-        >
-
-          <p class="answer-label">
-            ANSWER
-          </p>
-
-          <h3 id="category-answer">
-          </h3>
-
-          <div class="why-box">
-
-            <span>
-              WHY?
-            </span>
-
-            <p id="category-explanation">
-            </p>
-
-          </div>
-
-        </div>
-
-        <div
-          id="category-host-controls"
-          class="game-controls"
-        >
-
-          <button
-            id="category-correct-button"
-            class="correct-button"
-            type="button"
-          >
-            CORRECT
-          </button>
-
-          <button
-            id="category-wrong-button"
-            class="wrong-button"
-            type="button"
-          >
-            WRONG / STEAL
-          </button>
-
-          <button
-            id="category-reveal-button"
-            class="secondary-button"
-            type="button"
-          >
-            REVEAL ANSWER
-          </button>
-
-        </div>
-
-        <div
-          id="category-steal-panel"
-          class="steal-panel hidden"
-        >
-
-          <p>
-            STEAL
-          </p>
-
-          <div
-            id="category-steal-timer"
-            class="timer-display"
-          >
-            15
-          </div>
-
-          <div id="category-steal-team-buttons">
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </template>
-
-
-  <!-- =========================================================
-       WHO'S THAT TEMPLATE
-  ========================================================== -->
-
-  <template id="whos-that-template">
-
-    <div class="game-panel whos-that-panel">
-
-      <div class="round-counter">
-        ROUND
-        <span id="whos-round-number">
-          1
-        </span>
-        / 10
-      </div>
-
-      <div
-        id="whos-timer"
-        class="timer-display"
-      >
-        30
-      </div>
-
-      <div class="whos-image-frame">
-
-        <img
-          id="whos-image"
-          src=""
-          alt="Who's That silhouette"
-        >
-
-      </div>
-
-      <h2
-        id="whos-reveal-name"
-        class="hidden"
-      >
-      </h2>
-
-      <div
-        id="whos-team-buttons"
-        class="team-action-buttons"
-      >
-      </div>
-
-      <div class="game-controls">
-
-        <button
-          id="whos-pause-button"
-          class="secondary-button"
-          type="button"
-        >
-          PAUSE
-        </button>
-
-        <button
-          id="whos-correct-button"
+          id="category-correct-button"
           class="correct-button"
           type="button"
         >
@@ -852,811 +725,937 @@
         </button>
 
         <button
-          id="whos-wrong-button"
+          id="category-wrong-button"
           class="wrong-button"
           type="button"
         >
-          WRONG
+          WRONG / STEAL
         </button>
 
         <button
-          id="whos-reveal-button"
+          id="category-reveal-button"
+          class="secondary-button"
+          type="button"
+        >
+          REVEAL ANSWER
+        </button>
+
+      </div>
+
+      <div
+        id="category-steal-panel"
+        class="steal-panel hidden"
+      >
+
+        <p>
+          STEAL
+        </p>
+
+        <div
+          id="category-steal-timer"
+          class="timer-display"
+        >
+          15
+        </div>
+
+        <div id="category-steal-team-buttons">
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</template>
+
+
+<!-- =========================================================
+     WHO'S THAT TEMPLATE
+========================================================== -->
+
+<template id="whos-that-template">
+
+  <div class="game-panel whos-that-panel">
+
+    <div class="round-counter">
+      ROUND
+      <span id="whos-round-number">
+        1
+      </span>
+      / 10
+    </div>
+
+    <div
+      id="whos-timer"
+      class="timer-display"
+    >
+      30
+    </div>
+
+    <div class="whos-image-frame">
+
+      <img
+        id="whos-image"
+        src=""
+        alt="Who's That silhouette"
+      >
+
+    </div>
+
+    <h2
+      id="whos-reveal-name"
+      class="hidden"
+    >
+    </h2>
+
+    <div
+      id="whos-team-buttons"
+      class="team-action-buttons"
+    >
+    </div>
+
+    <div class="game-controls">
+
+      <button
+        id="whos-pause-button"
+        class="secondary-button"
+        type="button"
+      >
+        PAUSE
+      </button>
+
+      <button
+        id="whos-correct-button"
+        class="correct-button"
+        type="button"
+      >
+        CORRECT
+      </button>
+
+      <button
+        id="whos-wrong-button"
+        class="wrong-button"
+        type="button"
+      >
+        WRONG
+      </button>
+
+      <button
+        id="whos-reveal-button"
+        class="secondary-button"
+        type="button"
+      >
+        REVEAL
+      </button>
+
+      <button
+        id="whos-next-button"
+        class="primary-button hidden"
+        type="button"
+      >
+        NEXT
+      </button>
+
+    </div>
+
+  </div>
+
+</template>
+
+
+<!-- =========================================================
+     MOVIE REVIEWS TEMPLATE
+========================================================== -->
+
+<template id="movie-reviews-template">
+
+  <div class="game-panel movie-review-panel">
+
+    <div class="round-counter">
+      REVIEW
+      <span id="review-round-number">
+        1
+      </span>
+      / 10
+    </div>
+
+    <div
+      id="review-timer"
+      class="timer-display"
+    >
+      30
+    </div>
+
+    <article class="review-card">
+
+      <div
+        id="review-stars"
+        class="review-stars"
+      >
+      </div>
+
+      <blockquote id="review-text">
+      </blockquote>
+
+      <p
+        id="review-author"
+        class="review-author"
+      >
+      </p>
+
+    </article>
+
+    <div
+      id="review-reveal"
+      class="movie-reveal hidden"
+    >
+
+      <img
+        id="review-poster"
+        src=""
+        alt="Movie poster"
+      >
+
+      <h2 id="review-movie-title">
+      </h2>
+
+    </div>
+
+    <div class="game-controls">
+
+      <button
+        id="review-timer-button"
+        class="secondary-button"
+        type="button"
+      >
+        START TIMER
+      </button>
+
+      <button
+        id="review-reveal-button"
+        class="primary-button"
+        type="button"
+      >
+        REVEAL
+      </button>
+
+      <button
+        id="review-next-button"
+        class="secondary-button hidden"
+        type="button"
+      >
+        NEXT
+      </button>
+
+    </div>
+
+  </div>
+
+</template>
+
+
+<!-- =========================================================
+     SONG GAME TEMPLATE
+========================================================== -->
+
+<template id="song-game-template">
+
+  <div class="game-panel song-panel">
+
+    <div class="round-counter">
+      TRACK
+      <span id="song-round-number">
+        1
+      </span>
+      / 10
+    </div>
+
+    <div
+      id="song-category"
+      class="song-category"
+    >
+    </div>
+
+    <div
+      id="song-private-betting"
+      class="private-betting-panel"
+    >
+
+      <h3 id="betting-team-name">
+      </h3>
+
+      <p>
+        Choose your wager.
+      </p>
+
+      <div
+        id="wager-track"
+        class="wager-track"
+      >
+      </div>
+
+      <button
+        id="lock-wager-button"
+        class="primary-button"
+        type="button"
+      >
+        LOCK WAGER
+      </button>
+
+    </div>
+
+    <div
+      id="song-round-controls"
+      class="hidden"
+    >
+
+      <div class="game-controls">
+
+        <button
+          id="song-play-button"
+          class="primary-button"
+          type="button"
+        >
+          PLAY CLIP
+        </button>
+
+        <button
+          id="song-replay-button"
+          class="secondary-button"
+          type="button"
+        >
+          REPLAY
+        </button>
+
+        <button
+          id="song-reveal-button"
           class="secondary-button"
           type="button"
         >
           REVEAL
         </button>
 
-        <button
-          id="whos-next-button"
-          class="primary-button hidden"
-          type="button"
-        >
-          NEXT
-        </button>
+      </div>
 
+      <div
+        id="song-team-buttons"
+        class="team-action-buttons"
+      >
+      </div>
+
+      <div
+        id="song-answer"
+        class="answer-section hidden"
+      >
+
+        <h2 id="song-title">
+        </h2>
+
+        <p id="song-artist">
+        </p>
+
+      </div>
+
+      <button
+        id="song-next-button"
+        class="primary-button hidden"
+        type="button"
+      >
+        NEXT TRACK
+      </button>
+
+    </div>
+
+  </div>
+
+</template>
+
+
+<!-- =========================================================
+     SWITCH TENNIS TEMPLATE
+========================================================== -->
+
+<template id="switch-tennis-template">
+
+  <div class="game-panel tennis-panel">
+
+    <p class="eyebrow">
+      SWITCH SPORTS
+    </p>
+
+    <h2 class="giant-game-title">
+      TENNIS
+    </h2>
+
+    <div
+      id="tennis-matchup"
+      class="tennis-matchup"
+    >
+    </div>
+
+    <div
+      id="tennis-winner-buttons"
+      class="team-action-buttons"
+    >
+    </div>
+
+    <div
+      id="tennis-standings"
+      class="tennis-standings"
+    >
+    </div>
+
+    <button
+      id="finish-tennis-button"
+      class="primary-button"
+      type="button"
+    >
+      FINISH TOURNAMENT
+    </button>
+
+  </div>
+
+</template>
+
+
+<!-- =========================================================
+     PIXEL MOVIE TEMPLATE
+========================================================== -->
+
+<template id="pixel-movie-template">
+
+  <div class="game-panel pixel-panel">
+
+    <div class="round-counter">
+      MOVIE
+      <span id="pixel-round-number">
+        1
+      </span>
+      / 10
+    </div>
+
+    <div
+      id="pixel-current-value"
+      class="pixel-value"
+    >
+      50 POINTS
+    </div>
+
+    <div class="pixel-image-frame">
+
+      <img
+        id="pixel-movie-image"
+        src=""
+        alt="Pixelated movie scene"
+      >
+
+    </div>
+
+    <div
+      id="pixel-lock-buttons"
+      class="team-action-buttons"
+    >
+    </div>
+
+    <div class="game-controls">
+
+      <button
+        id="pixel-clearer-button"
+        class="primary-button"
+        type="button"
+      >
+        REVEAL MORE
+      </button>
+
+      <button
+        id="pixel-reveal-button"
+        class="secondary-button"
+        type="button"
+      >
+        REVEAL MOVIE
+      </button>
+
+    </div>
+
+    <div
+      id="pixel-final-reveal"
+      class="answer-section hidden"
+    >
+
+      <h2 id="pixel-movie-title">
+      </h2>
+
+      <div
+        id="pixel-marking-buttons"
+        class="team-action-buttons"
+      >
       </div>
 
     </div>
 
-  </template>
+  </div>
+
+</template>
 
 
-  <!-- =========================================================
-       MOVIE REVIEWS TEMPLATE
-  ========================================================== -->
+<!-- =========================================================
+     GEOGUESSR TEMPLATE
+========================================================== -->
 
-  <template id="movie-reviews-template">
+<template id="geoguessr-template">
 
-    <div class="game-panel movie-review-panel">
+  <div class="game-panel geoguessr-panel">
 
-      <div class="round-counter">
-        REVIEW
-        <span id="review-round-number">
-          1
-        </span>
-        / 10
+    <div class="round-counter">
+      LOCATION
+      <span id="geo-round-number">
+        1
+      </span>
+      / 6
+    </div>
+
+    <div
+      id="geo-timer"
+      class="timer-display"
+    >
+      60
+    </div>
+
+    <div class="geo-mystery-frame">
+
+      <img
+        id="geo-mystery-image"
+        src=""
+        alt="Mystery location"
+      >
+
+    </div>
+
+    <div
+      id="geo-observation-controls"
+      class="game-controls"
+    >
+
+      <button
+        id="geo-start-button"
+        class="primary-button"
+        type="button"
+      >
+        START 60 SEC
+      </button>
+
+      <button
+        id="geo-begin-guesses-button"
+        class="secondary-button"
+        type="button"
+      >
+        BEGIN GUESSES
+      </button>
+
+    </div>
+
+    <div
+      id="geo-map-stage"
+      class="hidden"
+    >
+
+      <div
+        id="geo-current-team"
+        class="turn-indicator"
+      >
       </div>
 
       <div
-        id="review-timer"
+        id="geoguessr-map"
+        class="geoguessr-map"
+      >
+      </div>
+
+      <button
+        id="geo-lock-button"
+        class="primary-button"
+        type="button"
+      >
+        LOCK GUESS
+      </button>
+
+    </div>
+
+    <div
+      id="geo-results"
+      class="geo-results hidden"
+    >
+    </div>
+
+    <button
+      id="geo-next-button"
+      class="primary-button hidden"
+      type="button"
+    >
+      NEXT LOCATION
+    </button>
+
+  </div>
+
+</template>
+
+
+<!-- =========================================================
+     FAMILY FEUD TEMPLATE
+========================================================== -->
+
+<template id="family-feud-template">
+
+  <div class="game-panel feud-panel">
+
+    <p class="eyebrow">
+      SURVEY SAYS...
+    </p>
+
+    <div
+      id="feud-round-label"
+      class="round-counter"
+    >
+    </div>
+
+    <h2
+      id="feud-question"
+      class="big-question"
+    >
+    </h2>
+
+    <div
+      id="feud-board"
+      class="feud-board"
+    >
+    </div>
+
+    <div class="feud-status">
+
+      <div>
+        BANK
+        <span id="feud-bank">
+          0
+        </span>
+      </div>
+
+      <div>
+        STRIKES
+        <span id="feud-strikes">
+          0
+        </span>
+      </div>
+
+    </div>
+
+    <div class="game-controls">
+
+      <button
+        id="feud-strike-button"
+        class="wrong-button"
+        type="button"
+      >
+        ✕ STRIKE
+      </button>
+
+      <button
+        id="feud-play-pass-button"
+        class="secondary-button"
+        type="button"
+      >
+        PLAY / PASS
+      </button>
+
+      <button
+        id="feud-steal-button"
+        class="secondary-button"
+        type="button"
+      >
+        STEAL
+      </button>
+
+      <button
+        id="feud-next-round-button"
+        class="primary-button"
+        type="button"
+      >
+        NEXT ROUND
+      </button>
+
+    </div>
+
+    <div
+      id="fast-money-section"
+      class="fast-money-section hidden"
+    >
+
+      <h2>
+        FAST MONEY
+      </h2>
+
+      <div
+        id="fast-money-timer"
         class="timer-display"
       >
         30
       </div>
 
-      <article class="review-card">
-
-        <div
-          id="review-stars"
-          class="review-stars"
-        >
-        </div>
-
-        <blockquote id="review-text">
-        </blockquote>
-
-        <p
-          id="review-author"
-          class="review-author"
-        >
-        </p>
-
-      </article>
-
-      <div
-        id="review-reveal"
-        class="movie-reveal hidden"
-      >
-
-        <img
-          id="review-poster"
-          src=""
-          alt="Movie poster"
-        >
-
-        <h2 id="review-movie-title">
-        </h2>
-
-      </div>
-
-      <div class="game-controls">
-
-        <button
-          id="review-timer-button"
-          class="secondary-button"
-          type="button"
-        >
-          START TIMER
-        </button>
-
-        <button
-          id="review-reveal-button"
-          class="primary-button"
-          type="button"
-        >
-          REVEAL
-        </button>
-
-        <button
-          id="review-next-button"
-          class="secondary-button hidden"
-          type="button"
-        >
-          NEXT
-        </button>
-
+      <div id="fast-money-board">
       </div>
 
     </div>
 
-  </template>
-
-
-  <!-- =========================================================
-       SONG GAME TEMPLATE
-  ========================================================== -->
-
-  <template id="song-game-template">
-
-    <div class="game-panel song-panel">
-
-      <div class="round-counter">
-        TRACK
-        <span id="song-round-number">
-          1
-        </span>
-        / 10
-      </div>
-
-      <div
-        id="song-category"
-        class="song-category"
-      >
-      </div>
-
-      <div
-        id="song-private-betting"
-        class="private-betting-panel"
-      >
-
-        <h3 id="betting-team-name">
-        </h3>
-
-        <p>
-          Choose your wager.
-        </p>
-
-        <div
-          id="wager-track"
-          class="wager-track"
-        >
-        </div>
-
-        <button
-          id="lock-wager-button"
-          class="primary-button"
-          type="button"
-        >
-          LOCK WAGER
-        </button>
-
-      </div>
-
-
-      <div
-        id="song-play-stage"
-        class="song-play-stage hidden"
-      >
-
-        <div
-          id="locked-wagers-display"
-          class="locked-wagers-display"
-        >
-        </div>
-
-        <div class="vinyl-container">
-
-          <div
-            id="vinyl-record"
-            class="vinyl-record"
-          >
-            <div class="vinyl-label">
-              UNTITLED
-            </div>
-          </div>
-
-        </div>
-
-        <div
-          id="audio-waveform"
-          class="audio-waveform"
-        >
-        </div>
-
-        <button
-          id="play-song-button"
-          class="primary-button huge-button"
-          type="button"
-        >
-          ▶ PLAY CLIP
-        </button>
-
-        <div
-          id="song-result-controls"
-          class="song-result-controls"
-        >
-        </div>
-
-        <div
-          id="song-answer"
-          class="answer-section hidden"
-        >
-
-          <p class="answer-label">
-            SONG
-          </p>
-
-          <h3 id="song-title">
-          </h3>
-
-          <p id="song-artist">
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </template>
-
-
-  <!-- =========================================================
-       SWITCH TENNIS TEMPLATE
-  ========================================================== -->
-
-  <template id="switch-tennis-template">
-
-    <div class="game-panel tennis-panel">
-
-      <p class="eyebrow">
-        NINTENDO SWITCH SPORTS
-      </p>
-
-      <h2 class="giant-game-title">
-        KING OF THE COURT
-      </h2>
-
-      <div
-        id="tennis-match-display"
-        class="tennis-match-display"
-      >
-      </div>
-
-      <div
-        id="tennis-win-buttons"
-        class="team-action-buttons"
-      >
-      </div>
-
-      <div
-        id="tennis-standings"
-        class="tennis-standings"
-      >
-      </div>
-
-      <button
-        id="finish-tennis-button"
-        class="primary-button"
-        type="button"
-      >
-        FINISH TOURNAMENT
-      </button>
-
-    </div>
-
-  </template>
-
-
-  <!-- =========================================================
-       PIXEL MOVIE TEMPLATE
-  ========================================================== -->
-
-  <template id="pixel-movie-template">
-
-    <div class="game-panel pixel-panel">
-
-      <div class="round-counter">
-        MOVIE
-        <span id="pixel-round-number">
-          1
-        </span>
-        / 10
-      </div>
-
-      <div
-        id="pixel-current-value"
-        class="pixel-value"
-      >
-        50 POINTS
-      </div>
-
-      <div class="pixel-image-frame">
-
-        <img
-          id="pixel-movie-image"
-          src=""
-          alt="Pixelated movie scene"
-        >
-
-      </div>
-
-      <div
-        id="pixel-lock-buttons"
-        class="team-action-buttons"
-      >
-      </div>
-
-      <div class="game-controls">
-
-        <button
-          id="pixel-clearer-button"
-          class="primary-button"
-          type="button"
-        >
-          REVEAL MORE
-        </button>
-
-        <button
-          id="pixel-reveal-button"
-          class="secondary-button"
-          type="button"
-        >
-          REVEAL MOVIE
-        </button>
-
-      </div>
-
-      <div
-        id="pixel-final-reveal"
-        class="answer-section hidden"
-      >
-
-        <h2 id="pixel-movie-title">
-        </h2>
-
-        <div
-          id="pixel-marking-buttons"
-          class="team-action-buttons"
-        >
-        </div>
-
-      </div>
-
-    </div>
-
-  </template>
-
-
-  <!-- =========================================================
-       GEOGUESSR TEMPLATE
-  ========================================================== -->
-
-  <template id="geoguessr-template">
-
-    <div class="game-panel geoguessr-panel">
-
-      <div class="round-counter">
-        LOCATION
-        <span id="geo-round-number">
-          1
-        </span>
-        / 6
-      </div>
-
-      <div
-        id="geo-timer"
-        class="timer-display"
-      >
-        60
-      </div>
-
-      <div class="geo-mystery-frame">
-
-        <img
-          id="geo-mystery-image"
-          src=""
-          alt="Mystery location"
-        >
-
-      </div>
-
-      <div
-        id="geo-observation-controls"
-        class="game-controls"
-      >
-
-        <button
-          id="geo-start-button"
-          class="primary-button"
-          type="button"
-        >
-          START 60 SEC
-        </button>
-
-        <button
-          id="geo-begin-guesses-button"
-          class="secondary-button"
-          type="button"
-        >
-          BEGIN GUESSES
-        </button>
-
-      </div>
-
-      <div
-        id="geo-map-stage"
-        class="hidden"
-      >
-
-        <div
-          id="geo-current-team"
-          class="turn-indicator"
-        >
-        </div>
-
-        <div
-          id="geoguessr-map"
-          class="geoguessr-map"
-        >
-        </div>
-
-        <button
-          id="geo-lock-button"
-          class="primary-button"
-          type="button"
-        >
-          LOCK GUESS
-        </button>
-
-      </div>
-
-      <div
-        id="geo-results"
-        class="geo-results hidden"
-      >
-      </div>
-
-    </div>
-
-  </template>
-
-
-  <!-- =========================================================
-       FAMILY FEUD TEMPLATE
-  ========================================================== -->
-
-  <template id="family-feud-template">
-
-    <div class="game-panel feud-panel">
-
-      <p class="eyebrow">
-        SURVEY SAYS...
-      </p>
-
-      <div
-        id="feud-round-label"
-        class="round-counter"
-      >
-      </div>
-
-      <h2
-        id="feud-question"
-        class="big-question"
-      >
-      </h2>
-
-      <div
-        id="feud-board"
-        class="feud-board"
-      >
-      </div>
-
-      <div class="feud-status">
-
-        <div>
-          BANK
-          <span id="feud-bank">
-            0
-          </span>
-        </div>
-
-        <div>
-          STRIKES
-          <span id="feud-strikes">
-            0
-          </span>
-        </div>
-
-      </div>
-
-      <div class="game-controls">
-
-        <button
-          id="feud-strike-button"
-          class="wrong-button"
-          type="button"
-        >
-          ✕ STRIKE
-        </button>
-
-        <button
-          id="feud-play-pass-button"
-          class="secondary-button"
-          type="button"
-        >
-          PLAY / PASS
-        </button>
-
-        <button
-          id="feud-steal-button"
-          class="secondary-button"
-          type="button"
-        >
-          STEAL
-        </button>
-
-        <button
-          id="feud-next-round-button"
-          class="primary-button"
-          type="button"
-        >
-          NEXT ROUND
-        </button>
-
-      </div>
-
-      <div
-        id="fast-money-section"
-        class="fast-money-section hidden"
-      >
-
-        <h2>
-          FAST MONEY
-        </h2>
-
-        <div
-          id="fast-money-timer"
-          class="timer-display"
-        >
-          30
-        </div>
-
-        <div id="fast-money-board">
-        </div>
-
-      </div>
-
-    </div>
-
-  </template>
-
-
-  <!-- =========================================================
-       FINAL RESULTS
-  ========================================================== -->
-
-  <section id="final-results-screen" class="screen">
+  </div>
+
+</template>
+<!-- =========================================================
+     FINAL RESULTS
+========================================================== -->
+
+<section id="final-results-screen" class="screen">
+
+  <div
+    id="final-results-stage"
+    class="final-results-stage"
+  >
+
+    <p class="eyebrow">
+      FINAL RESULTS
+    </p>
+
+    <h2 id="final-results-heading">
+      THE SCORES ARE IN...
+    </h2>
 
     <div
-      id="final-results-stage"
-      class="final-results-stage"
+      id="podium"
+      class="podium"
     >
 
-      <p class="eyebrow">
-        FINAL RESULTS
-      </p>
-
-      <h2 id="final-results-heading">
-        THE SCORES ARE IN...
-      </h2>
+      <div
+        id="podium-second"
+        class="podium-position second-place"
+      >
+      </div>
 
       <div
-        id="podium"
-        class="podium"
+        id="podium-first"
+        class="podium-position first-place"
       >
-
-        <div
-          id="podium-second"
-          class="podium-position second-place"
-        >
-        </div>
-
-        <div
-          id="podium-first"
-          class="podium-position first-place"
-        >
-        </div>
-
-        <div
-          id="podium-third"
-          class="podium-position third-place"
-        >
-        </div>
-
       </div>
 
+      <div
+        id="podium-third"
+        class="podium-position third-place"
+      >
+      </div>
+
+    </div>
+
+    <button
+      id="reveal-results-button"
+      class="primary-button"
+      type="button"
+    >
+      BEGIN RESULTS
+    </button>
+
+    <button
+      id="close-game-button"
+      class="primary-button hidden"
+      type="button"
+    >
+      CLOSE GAME
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CONTINUE / ENDING SCREEN
+========================================================== -->
+
+<section id="continue-screen" class="screen">
+
+  <div class="terminal-screen">
+
+    <div class="terminal-cursor">
+      _
+    </div>
+
+    <h2 id="continue-text">
+      CONTINUE?
+    </h2>
+
+    <div class="continue-buttons">
+
       <button
-        id="reveal-results-button"
-        class="primary-button"
+        id="continue-yes-button"
         type="button"
       >
-        BEGIN RESULTS
+        YES
       </button>
 
       <button
-        id="close-game-button"
-        class="primary-button hidden"
+        id="continue-no-button"
         type="button"
       >
-        CLOSE GAME
+        NO
       </button>
 
     </div>
 
-  </section>
+    <p
+      id="thanks-for-playing"
+      class="hidden"
+    >
+      THANKS FOR PLAYING._
+    </p>
+
+  </div>
+
+</section>
 
 
-  <!-- =========================================================
-       CONTINUE / ENDING SCREEN
-  ========================================================== -->
+<!-- =========================================================
+     HOST MODAL
+========================================================== -->
 
-  <section id="continue-screen" class="screen">
+<div
+  id="host-modal"
+  class="modal hidden"
+>
 
-    <div class="terminal-screen">
+  <div class="modal-panel">
 
-      <div class="terminal-cursor">
-        _
+    <button
+      id="close-host-modal"
+      class="modal-close"
+      type="button"
+    >
+      ×
+    </button>
+
+    <h2>
+      HOST CONTROLS
+    </h2>
+
+    <div class="host-control-section">
+
+      <h3>
+        RENAME TEAMS
+      </h3>
+
+      <div id="host-team-name-controls">
       </div>
-
-      <h2 id="continue-text">
-        CONTINUE?
-      </h2>
-
-      <div class="continue-buttons">
-
-        <button
-          id="continue-yes-button"
-          type="button"
-        >
-          YES
-        </button>
-
-        <button
-          id="continue-no-button"
-          type="button"
-        >
-          NO
-        </button>
-
-      </div>
-
-      <p
-        id="thanks-for-playing"
-        class="hidden"
-      >
-        THANKS FOR PLAYING._
-      </p>
 
     </div>
 
-  </section>
-
-
-  <!-- =========================================================
-       HOST MODAL
-  ========================================================== -->
-
-  <div
-    id="host-modal"
-    class="modal hidden"
-  >
-
-    <div class="modal-panel">
+    <div class="host-control-section">
 
       <button
-        id="close-host-modal"
-        class="modal-close"
+        id="master-sound-toggle"
+        class="secondary-button"
         type="button"
       >
-        ×
+        SOUND ON
       </button>
 
-      <h2>
-        HOST CONTROLS
-      </h2>
+    </div>
 
-      <div class="host-control-section">
+    <div class="host-control-section danger-zone">
 
-        <h3>
-          RENAME TEAMS
-        </h3>
-
-        <div id="host-team-name-controls">
-        </div>
-
-      </div>
-
-      <div class="host-control-section">
-
-        <button
-          id="master-sound-toggle"
-          class="secondary-button"
-          type="button"
-        >
-          SOUND ON
-        </button>
-
-      </div>
-
-      <div class="host-control-section danger-zone">
-
-        <button
-          id="reset-game-button"
-          class="danger-button"
-          type="button"
-        >
-          RESET ENTIRE GAME
-        </button>
-
-      </div>
+      <button
+        id="reset-game-button"
+        class="danger-button"
+        type="button"
+      >
+        RESET ENTIRE GAME
+      </button>
 
     </div>
 
   </div>
 
+</div>
 
-  <!-- =========================================================
-       CONFIRM RESET MODAL
-  ========================================================== -->
 
-  <div
-    id="reset-confirmation-modal"
-    class="modal hidden"
-  >
+<!-- =========================================================
+     RESET CONFIRMATION MODAL
+========================================================== -->
 
-    <div class="modal-panel">
+<div
+  id="reset-confirmation-modal"
+  class="modal hidden"
+>
 
-      <h2>
-        RESET EVERYTHING?
-      </h2>
+  <div class="modal-panel confirmation-panel">
 
-      <p>
-        All scores, completed games and progress will be erased.
-      </p>
+    <h2>
+      RESET EVERYTHING?
+    </h2>
 
-      <div class="game-controls">
+    <p>
+      All scores, game progress and completed rounds will be cleared.
+    </p>
 
-        <button
-          id="cancel-reset-button"
-          class="secondary-button"
-          type="button"
-        >
-          CANCEL
-        </button>
+    <div class="game-controls">
 
-        <button
-          id="confirm-reset-button"
-          class="danger-button"
-          type="button"
-        >
-          RESET
-        </button>
+      <button
+        id="cancel-reset-button"
+        class="secondary-button"
+        type="button"
+      >
+        CANCEL
+      </button>
 
-      </div>
+      <button
+        id="confirm-reset-button"
+        class="danger-button"
+        type="button"
+      >
+        RESET GAME
+      </button>
 
     </div>
 
   </div>
 
+</div>
 
-  <!-- =========================================================
-       AUDIO
-  ========================================================== -->
 
-  <audio
-    id="song-game-audio"
-    preload="auto"
-  >
-  </audio>
-<!-- HOME / MENU MUSIC -->
+<!-- =========================================================
+     AUDIO
+========================================================== -->
+
+<!-- TITLE / TEAM SETUP MUSIC -->
+
+<audio
+  id="title-screen-music"
+  src="assets/audio/RecordIt-1786773450 2.mp3"
+  preload="auto"
+  loop
+></audio>
+
+
+<!-- MAIN HUB MUSIC -->
 
 <audio
   id="menu-music"
-  src="assets/audio/sfx/Home Page.mp3"
+  src="assets/audio/Home Page(1).mp3"
   preload="auto"
   loop
+></audio>
+
+
+<!-- SONG GAME -->
+
+<audio
+  id="song-game-audio"
+  preload="auto"
 ></audio>
 
 
@@ -1758,117 +1757,16 @@
   preload="auto"
 ></audio>
 
-  <!-- Sound-effect hooks.
-       We will connect your exact audio files later. -->
 
-  <audio
-    id="team-buzz-sound"
-    preload="auto"
-  >
-  </audio>
+<!-- =========================================================
+     JAVASCRIPT
+========================================================== -->
 
-  <audio
-    id="feud-ding-sound"
-    preload="auto"
-  >
-  </audio>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
 
-  <audio
-    id="feud-strike-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="feud-win-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="feud-theme-sound"
-    preload="auto"
-    loop
-  >
-  </audio>
-
-  <audio
-    id="tennis-music"
-    preload="auto"
-    loop
-  >
-  </audio>
-
-  <audio
-    id="correct-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="wrong-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="reveal-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="timer-warning-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="time-up-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="lock-in-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="drumroll-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="applause-small-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="applause-medium-sound"
-    preload="auto"
-  >
-  </audio>
-
-  <audio
-    id="winner-sound"
-    preload="auto"
-  >
-  </audio>
-
-
-  <!-- =========================================================
-       JAVASCRIPT
-  ========================================================== -->
-
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  ></script>
-
-  <script src="script.js?v=2"></script>
+<script src="script.js?v=4"></script>
 
 </body>
 </html>
