@@ -3109,3 +3109,108 @@ body.glitching {
     text-align: center;
   }
 }
+/* ============================================================
+   SONG GAME — VINYL + WAVEFORM
+============================================================ */
+
+.vinyl-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.vinyl-record {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 180px;
+  height: 180px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #2d3444 0 10%,
+      #0c111b 11% 18%,
+      #1d2430 19% 21%,
+      #090d13 22% 100%
+    );
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+.vinyl-record.spinning {
+  animation:
+    vinylSpin 1.5s linear infinite;
+}
+
+.vinyl-label {
+  color: var(--gold);
+
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+@keyframes vinylSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.audio-waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  min-height: 85px;
+
+  margin: 20px auto;
+}
+
+.wave-bar {
+  display: block;
+
+  width: 7px;
+  height: 18px;
+
+  border-radius: 999px;
+
+  background: var(--cyan);
+}
+
+.audio-waveform.playing .wave-bar {
+  animation:
+    waveformMove 0.7s ease-in-out infinite alternate;
+}
+
+.audio-waveform.playing
+.wave-bar:nth-child(2n) {
+  animation-delay: 0.1s;
+}
+
+.audio-waveform.playing
+.wave-bar:nth-child(3n) {
+  animation-delay: 0.2s;
+}
+
+.audio-waveform.playing
+.wave-bar:nth-child(4n) {
+  animation-delay: 0.3s;
+}
+
+@keyframes waveformMove {
+  from {
+    height: 12px;
+    opacity: 0.55;
+  }
+
+  to {
+    height: 65px;
+    opacity: 1;
+  }
+}
