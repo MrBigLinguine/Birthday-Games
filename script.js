@@ -3581,167 +3581,109 @@ function initialiseWhosThat() {
 ============================================================ */
 
 const REVIEW_DATA = [
+
   {
-    stars: "★☆☆☆☆",
-
+    title: "Jaws",
+    stars: 2,
+    author: "Shafrillas Productions",
     review:
-      "Absolutely terrible. Everyone just keeps running around and screaming.",
-
-    author:
-      "1-star review",
-
-    title:
-      "Movie 1",
-
+      "The Meg (2018) is better AND it has Jason Statham innit. This movie fails cinema.",
     poster:
-      "assets/images/movie-reviews/1.jpg"
+      "assets/images/movie-reviews/jaws poster.avif"
   },
 
   {
-    stars: "★★☆☆☆",
-
+    title: "The Matrix",
+    stars: 1,
+    author: "Kaho Matsui",
     review:
-      "The main character made every possible bad decision and somehow survived.",
-
-    author:
-      "2-star review",
-
-    title:
-      "Movie 2",
-
+      "Got scared at the bellybutton scene when I was 6 and then I ran outside crying and got stung by a bee in the yard. Awful experience. Dad yelled at me after that too. It was no good.",
     poster:
-      "assets/images/movie-reviews/2.jpg"
+      "assets/images/movie-reviews/matrix poster.jpg"
   },
 
   {
-    stars: "★☆☆☆☆",
-
+    title: "Gladiator",
+    stars: 1,
+    author: "Adambolt",
     review:
-      "Way too long. Could have been solved in five minutes if anyone communicated.",
-
-    author:
-      "1-star review",
-
-    title:
-      "Movie 3",
-
+      "I was not entertained.",
     poster:
-      "assets/images/movie-reviews/3.jpg"
+      "assets/images/movie-reviews/gladiator poster.jpg"
   },
 
   {
-    stars: "★★☆☆☆",
-
+    title: "The Lion King",
+    stars: 3,
+    author: "Clownhead",
     review:
-      "A lot of explosions for something that made very little sense.",
-
-    author:
-      "2-star review",
-
-    title:
-      "Movie 4",
-
+      "If only Bill added a gay meerkat with anxiety into the OG Hamlet. Could have had a real hit on his hands.",
     poster:
-      "assets/images/movie-reviews/4.jpg"
+      "assets/images/movie-reviews/the lion king poster.jpg"
   },
 
   {
-    stars: "★☆☆☆☆",
-
+    title: "2001: A Space Odyssey",
+    stars: 2,
+    author: "Carter",
     review:
-      "I don't understand why everyone loves this. The villain was more interesting.",
-
-    author:
-      "1-star review",
-
-    title:
-      "Movie 5",
-
+      "I am no film expert by any means, but this has got to be the most boring, anticlimactic and unremarkable movie I’ve ever seen. There is no real plot or characters. Nothing even remotely interesting happens after the beginning with the apes. 95% of the movie there is no dialogue. All of this could be made up for if it gave the audience something to contemplate, but it doesn’t. It’s astonishing to me that this is regarded as one of the best movies of all time.",
     poster:
-      "assets/images/movie-reviews/5.jpg"
+      "assets/images/movie-reviews/2001- A Space Odyssey Poster.jpg"
   },
 
   {
-    stars: "★★☆☆☆",
-
+    title: "Pulp Fiction",
+    stars: 1,
+    author: "Anyonebutsyndey",
     review:
-      "This could have been an email.",
-
-    author:
-      "2-star review",
-
-    title:
-      "Movie 6",
-
+      "HE GOES BACK FOR THE POPTART. THE FUCKEN POPTART. HE WAS SO CLOSE TO BEING GOOD, SAFE, FINE, BUT NOOOO, HE NEEDS A POPTART. MOTHERFUCKEN BRUCE WILLIS POPTART-EATING ASS. FUCKEN POPTART. THE GODDAMNED POPTART. BRUCE WILLIS FUCKEN GRANDFATHER’S ASS-WATCH MOTHERFUCKER NEEDS A GOD DAMN POPTART?! ARE YOU KIDDING ME??? ZERO FUCKING STARS.",
     poster:
-      "assets/images/movie-reviews/6.jpg"
+      "assets/images/movie-reviews/pulp fiction poster.jpg"
   },
 
   {
-    stars: "★☆☆☆☆",
-
-    review:
-      "Nothing about this situation felt safe or reasonable.",
-
-    author:
-      "1-star review",
-
     title:
-      "Movie 7",
-
+      "The Lord of the Rings: The Fellowship of the Ring",
+    stars: 1,
+    author: "davem82",
+    review:
+      "Absolutely terrible. Three hours of people walking.",
     poster:
-      "assets/images/movie-reviews/7.jpg"
+      "assets/images/movie-reviews/lotr poster.jpeg"
   },
 
   {
-    stars: "★★☆☆☆",
-
+    title: "The Godfather",
+    stars: 2,
+    author: "Weed King",
     review:
-      "Too many characters and I couldn't remember half their names.",
-
-    author:
-      "2-star review",
-
-    title:
-      "Movie 8",
-
+      "Justice for the horse they killed for that one scene!!!",
     poster:
-      "assets/images/movie-reviews/8.jpg"
+      "assets/images/movie-reviews/the godfather poster.jpg"
   },
 
   {
-    stars: "★☆☆☆☆",
-
+    title: "Fight Club",
+    stars: 3,
+    author: "Fraser Costen",
     review:
-      "Everyone desperately needed therapy.",
-
-    author:
-      "1-star review",
-
-    title:
-      "Movie 9",
-
+      "I actually wanted to learn how to make soap. Now I am being arrested on domestic terrorism charges.",
     poster:
-      "assets/images/movie-reviews/9.jpg"
+      "assets/images/movie-reviews/fight club poster.jpg"
   },
 
   {
-    stars: "★★☆☆☆",
-
+    title: "Forrest Gump",
+    stars: 1,
+    author: "Jed",
     review:
-      "I watched the whole thing and I'm still not sure what the plan was.",
-
-    author:
-      "2-star review",
-
-    title:
-      "Movie 10",
-
+      "Awful yet effective piece of propaganda. Obey all orders blindly and you will be promptly rewarded. Disobey and fight back and you get AIDS and die.",
     poster:
-      "assets/images/movie-reviews/10.jpg"
+      "assets/images/movie-reviews/forrest gump poster.jpg"
   }
-];
 
+];
 
 /* ============================================================
    MOVIE REVIEWS
@@ -3924,8 +3866,8 @@ function initialiseMovieReviews() {
 
 
       $("#review-movie-title")
-        .textContent =
-        item.title;
+  .textContent =
+  "";
 
 
       $("#review-reveal")
