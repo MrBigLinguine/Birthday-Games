@@ -6809,273 +6809,428 @@ function initialiseGeoGuessr() {
 
   function revealGeoResults() {
 
-    const location =
-      GEO_DATA[
-        round
-      ];
+  const location =
+    GEO_DATA[
+      round
+    ];
 
 
-    $("#geo-current-team")
-      .textContent =
-      `ANSWER — ${location.name}`;
+  $("#geo-current-team")
+    .textContent =
+    `ANSWER — ${location.name}`;
 
 
-    if (
-      temporaryMarker
-    ) {
+  if (
+    temporaryMarker
+  ) {
 
-      temporaryMarker
-        .remove();
+    temporaryMarker
+      .remove();
 
 
-      temporaryMarker =
-        null;
-    }
-
-
-    L.marker(
-      [
-        location.lat,
-        location.lng
-      ]
-    )
-    .addTo(
-      map
-    )
-    .bindPopup(
-      `ACTUAL: ${location.name}`
-    )
-    .openPopup();
-
-
-    const ranking =
-      guesses.map(
-        (
-          guess,
-          index
-        ) => {
-
-          const distance =
-            distanceKm(
-              guess.lat,
-              guess.lng,
-              location.lat,
-              location.lng
-            );
-
-
-          L.marker(
-            [
-              guess.lat,
-              guess.lng
-            ]
-          )
-          .addTo(
-            map
-          )
-          .bindPopup(
-            `${state.teams[index].name}: ${Math.round(distance)} km`
-          );
-
-
-          L.polyline(
-            [
-
-              [
-                guess.lat,
-                guess.lng
-              ],
-
-              [
-                location.lat,
-                location.lng
-              ]
-
-            ]
-          )
-          .addTo(
-            map
-          );
-
-
-          return {
-
-            index,
-
-            distance
-          };
-        }
-      );
-
-
-    ranking.sort(
-      (
-        a,
-        b
-      ) =>
-        a.distance -
-        b.distance
-    );
-
-
-    /*
-      Existing scoring:
-
-      3 teams:
-      1st +30
-      2nd +10
-      3rd 0
-
-      2 teams:
-      1st +30
-      2nd +10
-    */
-
-    const awards =
-      state.teamCount === 2
-
-        ? [30, 10]
-
-        : [30, 10, 0];
-
-
-    ranking.forEach(
-      (
-        entry,
-        place
-      ) => {
-
-        if (
-          awards[place] >
-          0
-        ) {
-
-          changeScore(
-            entry.index,
-            awards[place]
-          );
-        }
-      }
-    );
-
-
-    const bounds =
-      L.latLngBounds(
-        [
-
-          [
-            location.lat,
-            location.lng
-          ],
-
-          ...guesses.map(
-            guess => [
-
-              guess.lat,
-
-              guess.lng
-            ]
-          )
-
-        ]
-      );
-
-
-    map.fitBounds(
-      bounds,
-      {
-        padding:
-          [60, 60]
-      }
-    );
-
-
-    const results =
-      $("#geo-results");
-
-
-    results.innerHTML = `
-      <h3>
-        ${escapeHtml(
-          location.name
-        )}
-      </h3>
-    `;
-
-
-    ranking.forEach(
-      (
-        entry,
-        place
-      ) => {
-
-        const row =
-          document.createElement(
-            "div"
-          );
-
-
-        row.className =
-          "geo-result-row";
-
-
-        row.innerHTML = `
-          <div class="geo-result-name">
-            ${place + 1}.
-            ${escapeHtml(
-              state.teams[
-                entry.index
-              ].name
-            )}
-          </div>
-
-          <div class="geo-result-distance">
-            ${Math.round(
-              entry.distance
-            ).toLocaleString()}
-            km
-          </div>
-
-          <div class="geo-result-points">
-            ${
-              awards[place] > 0
-                ? `+${awards[place]}`
-                : "0"
-            }
-          </div>
-        `;
-
-
-        results.appendChild(
-          row
-        );
-      }
-    );
-
-
-    results.classList
-      .remove(
-        "hidden"
-      );
-
-
-    $("#geo-lock-button")
-      .disabled =
-      true;
-
-
-    $("#geo-next-button")
-      .classList.remove(
-        "hidden"
-      );
-
-
-    playSfx(
-      "reveal-sound",
-      0.58
-    );
+    temporaryMarker =
+      null;
   }
 
+
+  /*
+    MARKER COLOURS
+
+    Team 1 = blue
+    Team 2 = pink
+    Team 3 = green
+    Actual = gold star
+  */
+
+  const teamColours = [
+    "#2f80ed",
+    "#e85aa6",
+    "#35c46a"
+  ];
+
+
+  function createTeamIcon(
+    colour
+  ) {
+
+    return L.divIcon({
+
+      className:
+        "geo-custom-marker",
+
+      html: `
+        <svg
+          width="36"
+          height="48"
+          viewBox="0 0 36 48"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="
+              M18 1
+              C8.6 1 1 8.6 1 18
+              C1 30.5 18 47 18 47
+              C18 47 35 30.5 35 18
+              C35 8.6 27.4 1 18 1
+              Z
+            "
+            fill="${colour}"
+            stroke="white"
+            stroke-width="2"
+          />
+
+          <circle
+            cx="18"
+            cy="18"
+            r="6"
+            fill="white"
+          />
+        </svg>
+      `,
+
+      iconSize:
+        [36, 48],
+
+      iconAnchor:
+        [18, 47],
+
+      popupAnchor:
+        [0, -42]
+    });
+  }
+
+
+  const actualIcon =
+    L.divIcon({
+
+      className:
+        "geo-custom-marker",
+
+      html: `
+        <svg
+          width="42"
+          height="54"
+          viewBox="0 0 42 54"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="
+              M21 1
+              C10 1 1 10 1 21
+              C1 35 21 53 21 53
+              C21 53 41 35 41 21
+              C41 10 32 1 21 1
+              Z
+            "
+            fill="#f3c969"
+            stroke="white"
+            stroke-width="2"
+          />
+
+          <path
+            d="
+              M21 10
+              L24.1 16.3
+              L31 17.3
+              L26 22.2
+              L27.2 29
+              L21 25.8
+              L14.8 29
+              L16 22.2
+              L11 17.3
+              L17.9 16.3
+              Z
+            "
+            fill="white"
+          />
+        </svg>
+      `,
+
+      iconSize:
+        [42, 54],
+
+      iconAnchor:
+        [21, 53],
+
+      popupAnchor:
+        [0, -48]
+    });
+
+
+  /*
+    ACTUAL LOCATION
+  */
+
+  L.marker(
+    [
+      location.lat,
+      location.lng
+    ],
+    {
+      icon:
+        actualIcon
+    }
+  )
+  .addTo(
+    map
+  )
+  .bindPopup(
+    `ACTUAL: ${location.name}`
+  )
+  .openPopup();
+
+
+  /*
+    TEAM GUESSES
+  */
+
+  const ranking =
+    guesses.map(
+      (
+        guess,
+        index
+      ) => {
+
+        const distance =
+          distanceKm(
+            guess.lat,
+            guess.lng,
+            location.lat,
+            location.lng
+          );
+
+
+        const teamIcon =
+          createTeamIcon(
+            teamColours[index]
+          );
+
+
+        L.marker(
+          [
+            guess.lat,
+            guess.lng
+          ],
+          {
+            icon:
+              teamIcon
+          }
+        )
+        .addTo(
+          map
+        )
+        .bindPopup(
+          `${state.teams[index].name}: ${Math.round(distance)} km`
+        );
+
+
+        L.polyline(
+          [
+
+            [
+              guess.lat,
+              guess.lng
+            ],
+
+            [
+              location.lat,
+              location.lng
+            ]
+
+          ],
+          {
+            color:
+              teamColours[index],
+
+            weight:
+              3,
+
+            opacity:
+              0.85
+          }
+        )
+        .addTo(
+          map
+        );
+
+
+        return {
+
+          index,
+
+          distance
+        };
+      }
+    );
+
+
+  ranking.sort(
+    (
+      a,
+      b
+    ) =>
+      a.distance -
+      b.distance
+  );
+
+
+  /*
+    Existing scoring:
+
+    3 teams:
+    1st +30
+    2nd +10
+    3rd 0
+
+    2 teams:
+    1st +30
+    2nd +10
+  */
+
+  const awards =
+    state.teamCount === 2
+
+      ? [30, 10]
+
+      : [30, 10, 0];
+
+
+  ranking.forEach(
+    (
+      entry,
+      place
+    ) => {
+
+      if (
+        awards[place] >
+        0
+      ) {
+
+        changeScore(
+          entry.index,
+          awards[place]
+        );
+      }
+    }
+  );
+
+
+  const bounds =
+    L.latLngBounds(
+      [
+
+        [
+          location.lat,
+          location.lng
+        ],
+
+        ...guesses.map(
+          guess => [
+
+            guess.lat,
+
+            guess.lng
+          ]
+        )
+
+      ]
+    );
+
+
+  map.fitBounds(
+    bounds,
+    {
+      padding:
+        [60, 60]
+    }
+  );
+
+
+  const results =
+    $("#geo-results");
+
+
+  results.innerHTML = `
+    <h3>
+      ${escapeHtml(
+        location.name
+      )}
+    </h3>
+  `;
+
+
+  ranking.forEach(
+    (
+      entry,
+      place
+    ) => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "geo-result-row";
+
+
+      row.innerHTML = `
+        <div class="geo-result-name">
+          ${place + 1}.
+          ${escapeHtml(
+            state.teams[
+              entry.index
+            ].name
+          )}
+        </div>
+
+        <div class="geo-result-distance">
+          ${Math.round(
+            entry.distance
+          ).toLocaleString()}
+          km
+        </div>
+
+        <div class="geo-result-points">
+          ${
+            awards[place] > 0
+              ? `+${awards[place]}`
+              : "0"
+          }
+        </div>
+      `;
+
+
+      results.appendChild(
+        row
+      );
+    }
+  );
+
+
+  results.classList
+    .remove(
+      "hidden"
+    );
+
+
+  $("#geo-lock-button")
+    .disabled =
+    true;
+
+
+  $("#geo-next-button")
+    .classList.remove(
+      "hidden"
+    );
+
+
+  playSfx(
+    "reveal-sound",
+    0.58
+  );
+}
 
 /* ------------------------------------------------------------
    NEXT LOCATION
