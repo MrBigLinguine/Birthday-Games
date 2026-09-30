@@ -6390,113 +6390,129 @@ function initialiseGeoGuessr() {
    RENDER ROUND
 ------------------------------------------------------------ */
 
-  function renderRound() {
+function renderRound() {
 
-    const location =
-      GEO_DATA[
-        round
-      ];
-
-
-    $("#geo-round-number")
-      .textContent =
-      round + 1;
+  const location =
+    GEO_DATA[
+      round
+    ];
 
 
-    $("#geo-mystery-image")
-      .src =
-      location.image;
+  $("#geo-round-number")
+    .textContent =
+    round + 1;
 
 
-    $("#geo-mystery-image")
-      .alt =
-      `Mystery location ${round + 1}`;
+  $("#geo-mystery-image")
+    .src =
+    location.image;
 
 
-    $("#geo-results")
-      .classList.add(
-        "hidden"
-      );
+  $("#geo-mystery-image")
+    .alt =
+    `Mystery location ${round + 1}`;
 
 
-    $("#geo-results")
-      .innerHTML =
-      "";
+  $("#geo-results")
+    .classList.add(
+      "hidden"
+    );
 
 
-    $("#geo-map-stage")
-      .classList.add(
-        "hidden"
-      );
+  $("#geo-results")
+    .innerHTML =
+    "";
 
 
-    $("#geo-observation-controls")
-      .classList.remove(
-        "hidden"
-      );
+  $("#geo-map-stage")
+    .classList.add(
+      "hidden"
+    );
 
 
-    $("#geo-next-button")
-      .classList.add(
-        "hidden"
-      );
+  $("#geo-observation-controls")
+    .classList.remove(
+      "hidden"
+    );
 
 
-    $("#geo-start-button")
-      .disabled =
-      false;
+  $("#geo-next-button")
+    .classList.add(
+      "hidden"
+    );
 
 
-    $("#geo-start-button")
-      .textContent =
-      "START 60 SEC";
+  $("#geo-start-button")
+    .disabled =
+    false;
 
 
-    $("#geo-begin-guesses-button")
-      .disabled =
-      false;
+  $("#geo-start-button")
+    .textContent =
+    "START 60 SEC";
 
 
-    currentTeam =
-      0;
+  $("#geo-begin-guesses-button")
+    .disabled =
+    false;
 
 
-    selectedLatLng =
+  $("#geo-lock-button")
+    .disabled =
+    false;
+
+
+  currentTeam =
+    0;
+
+
+  selectedLatLng =
+    null;
+
+
+  guesses =
+    [];
+
+
+  if (
+    temporaryMarker
+  ) {
+
+    temporaryMarker
+      .remove();
+
+    temporaryMarker =
       null;
-
-
-    guesses =
-      [];
-
-
-    if (map) {
-
-      map.remove();
-
-      map =
-        null;
-    }
-
-
-    observationTimer =
-      makeTimer({
-
-        duration:
-          60,
-
-        element:
-          $("#geo-timer"),
-
-        onFinish:
-          () => {
-
-            $("#geo-start-button")
-              .textContent =
-              "TIME UP";
-          }
-      });
   }
 
+
+  if (map) {
+
+    map.remove();
+
+    map =
+      null;
+  }
+
+
+  observationTimer =
+    makeTimer({
+
+      duration:
+        60,
+
+      element:
+        $("#geo-timer"),
+
+      onFinish:
+        () => {
+
+          $("#geo-start-button")
+            .textContent =
+            "TIME UP";
+        }
+    });
+}
 
 /* ------------------------------------------------------------
    START OBSERVATION TIMER
@@ -6557,85 +6573,142 @@ function initialiseGeoGuessr() {
    MAP
 ------------------------------------------------------------ */
 
-  function initialiseMap() {
+ function initialiseMap() {
 
-    if (map) {
+  if (map) {
 
-      map.remove();
-
-      map =
-        null;
-    }
-
+    map.remove();
 
     map =
-      L.map(
-        "geoguessr-map",
-        {
-          worldCopyJump:
-            true
-        }
-      )
-      .setView(
-        [15, 10],
-        1
-      );
-
-
-    L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-
-        maxZoom:
-          19,
-
-        attribution:
-          "&copy; OpenStreetMap contributors"
-      }
-    )
-    .addTo(
-      map
-    );
-
-
-    map.on(
-      "click",
-      event => {
-
-        selectedLatLng =
-          event.latlng;
-
-
-        if (
-          temporaryMarker
-        ) {
-
-          temporaryMarker
-            .remove();
-        }
-
-
-        temporaryMarker =
-          L.marker(
-            selectedLatLng
-          )
-          .addTo(
-            map
-          );
-      }
-    );
-
-
-    setTimeout(
-      () => {
-
-        map.invalidateSize();
-
-      },
-      100
-    );
+      null;
   }
 
+
+  map =
+    L.map(
+      "geoguessr-map",
+      {
+        worldCopyJump:
+          true
+      }
+    )
+    .setView(
+      [15, 10],
+      1
+    );
+
+
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+
+      maxZoom:
+        19,
+
+      attribution:
+        "&copy; OpenStreetMap contributors"
+    }
+  )
+  .addTo(
+    map
+  );
+
+
+  map.on(
+    "click",
+    event => {
+
+      selectedLatLng =
+        event.latlng;
+
+
+      if (
+        temporaryMarker
+      ) {
+
+        temporaryMarker
+          .remove();
+      }
+
+
+      const teamColours = [
+        "#2f80ed",
+        "#e85aa6",
+        "#35c46a"
+      ];
+
+
+      const tempIcon =
+        L.divIcon({
+
+          className:
+            "geo-custom-marker",
+
+          html: `
+            <svg
+              width="36"
+              height="48"
+              viewBox="0 0 36 48"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="
+                  M18 1
+                  C8.6 1 1 8.6 1 18
+                  C1 30.5 18 47 18 47
+                  C18 47 35 30.5 35 18
+                  C35 8.6 27.4 1 18 1
+                  Z
+                "
+                fill="${teamColours[currentTeam]}"
+                stroke="white"
+                stroke-width="2"
+              />
+
+              <circle
+                cx="18"
+                cy="18"
+                r="6"
+                fill="white"
+              />
+            </svg>
+          `,
+
+          iconSize:
+            [36, 48],
+
+          iconAnchor:
+            [18, 47],
+
+          popupAnchor:
+            [0, -42]
+        });
+
+
+      temporaryMarker =
+        L.marker(
+          selectedLatLng,
+          {
+            icon:
+              tempIcon
+          }
+        )
+        .addTo(
+          map
+        );
+    }
+  );
+
+
+  setTimeout(
+    () => {
+
+      map.invalidateSize();
+
+    },
+    100
+  );
+}
 
 /* ------------------------------------------------------------
    CURRENT TEAM
