@@ -2093,74 +2093,996 @@ button:disabled {
   text-align: center;
 }
 
-.tennis-matchup {
-  width:
-    min(820px, 100%);
+.tennis-match-display {
+  width: min(980px, 100%);
 
-  margin:
-    0 auto 26px;
+  margin: 22px auto 28px;
+  padding: 30px;
 
-  padding:
-    30px 24px;
+  border: 1px solid
+    rgba(115, 199, 245, 0.24);
 
-  border:
-    1px solid rgba(255, 255, 255, 0.17);
-
-  border-radius: 18px;
+  border-radius: 22px;
 
   background:
     linear-gradient(
-      180deg,
-      rgba(42, 79, 105, 0.9),
-      rgba(20, 47, 69, 0.96)
+      145deg,
+      rgba(22, 31, 50, 0.96),
+      rgba(9, 14, 27, 0.97)
     );
+
+  box-shadow:
+    inset 0 1px 0
+      rgba(255, 255, 255, 0.05),
+    0 20px 50px
+      rgba(0, 0, 0, 0.22);
+}
+
+
+.tennis-stage-label {
+  width: fit-content;
+
+  margin:
+    0 auto 14px;
+
+  padding:
+    7px 14px;
+
+  border:
+    1px solid
+    rgba(115, 199, 245, 0.38);
+
+  border-radius:
+    999px;
+
+  color:
+    var(--cyan);
+
+  background:
+    rgba(115, 199, 245, 0.08);
+
+  font-size:
+    0.8rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.16em;
+}
+
+
+.tennis-final-label {
+  color:
+    var(--gold);
+
+  border-color:
+    rgba(243, 201, 105, 0.48);
+
+  background:
+    rgba(243, 201, 105, 0.08);
+}
+
+
+.tennis-danger-label {
+  color:
+    var(--red);
+
+  border-color:
+    rgba(239, 101, 117, 0.48);
+
+  background:
+    rgba(239, 101, 117, 0.08);
+}
+
+
+.tennis-screen-title {
+  margin:
+    8px 0;
+
+  color:
+    white;
 
   font-family:
     Impact,
-    Haettenschweiler,
-    "Arial Narrow Bold",
     sans-serif;
 
   font-size:
-    clamp(1.8rem, 5vw, 4rem);
+    clamp(
+      2rem,
+      5vw,
+      4rem
+    );
+
+  letter-spacing:
+    0.04em;
 }
+
+
+.tennis-subtitle {
+  max-width:
+    720px;
+
+  margin:
+    10px auto 24px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    1rem;
+
+  line-height:
+    1.6;
+}
+
+
+/* DRAW TABLE */
+
+.tennis-draw-table {
+  width:
+    100%;
+
+  margin:
+    24px auto 4px;
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.10);
+
+  border-radius:
+    16px;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+}
+
+
+.tennis-draw-row {
+  display:
+    grid;
+
+  grid-template-columns:
+    1.2fr 1.5fr 0.5fr 1.5fr 1.1fr;
+
+  align-items:
+    center;
+
+  gap:
+    12px;
+
+  min-height:
+    64px;
+
+  padding:
+    12px 16px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+
+  color:
+    var(--text);
+
+  font-size:
+    0.95rem;
+}
+
+
+.tennis-draw-row:last-child {
+  border-bottom:
+    0;
+}
+
+
+.tennis-draw-header {
+  min-height:
+    46px;
+
+  color:
+    var(--muted);
+
+  background:
+    rgba(115, 199, 245, 0.07);
+
+  font-size:
+    0.72rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.10em;
+}
+
+
+.tennis-final-row {
+  color:
+    var(--gold);
+
+  background:
+    rgba(243, 201, 105, 0.055);
+}
+
+
+.tennis-vs-small {
+  color:
+    var(--muted);
+
+  font-weight:
+    900;
+}
+
+
+/* MATCH */
+
+.tennis-match-card {
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items:
+    center;
+
+  gap:
+    26px;
+
+  margin:
+    26px auto 6px;
+
+  padding:
+    28px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.10);
+
+  border-radius:
+    18px;
+
+  background:
+    rgba(255, 255, 255, 0.03);
+}
+
+
+.tennis-match-team {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  min-height:
+    110px;
+
+  padding:
+    20px;
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+
+  border-radius:
+    16px;
+
+  color:
+    white;
+
+  font-family:
+    Impact,
+    sans-serif;
+
+  font-size:
+    clamp(
+      1.8rem,
+      4vw,
+      3.3rem
+    );
+
+  letter-spacing:
+    0.03em;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(42, 65, 88, 0.9),
+      rgba(24, 40, 58, 0.9)
+    );
+}
+
+
+.tennis-match-team.team-1 {
+  border-color:
+    rgba(115, 199, 245, 0.65);
+
+  box-shadow:
+    0 0 22px
+    rgba(115, 199, 245, 0.11);
+}
+
+
+.tennis-match-team.team-2 {
+  border-color:
+    rgba(210, 141, 191, 0.65);
+
+  box-shadow:
+    0 0 22px
+    rgba(210, 141, 191, 0.11);
+}
+
+
+.tennis-match-team.team-3 {
+  border-color:
+    rgba(87, 211, 140, 0.65);
+
+  box-shadow:
+    0 0 22px
+    rgba(87, 211, 140, 0.11);
+}
+
+
+.tennis-match-centre {
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  align-items:
+    center;
+
+  gap:
+    12px;
+}
+
+
+.tennis-vs {
+  color:
+    white;
+
+  font-family:
+    Impact,
+    sans-serif;
+
+  font-size:
+    2rem;
+}
+
+
+.tennis-format-pill {
+  padding:
+    8px 12px;
+
+  border:
+    1px solid
+    rgba(115, 199, 245, 0.34);
+
+  border-radius:
+    999px;
+
+  color:
+    var(--cyan);
+
+  font-size:
+    0.72rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.10em;
+}
+
+
+.tennis-final-format {
+  color:
+    var(--gold);
+
+  border-color:
+    rgba(243, 201, 105, 0.48);
+}
+
+
+.tennis-grand-final {
+  border-color:
+    rgba(243, 201, 105, 0.34);
+
+  box-shadow:
+    0 0 30px
+    rgba(243, 201, 105, 0.07);
+}
+
+
+.tennis-final-instruction {
+  margin-top:
+    20px;
+
+  color:
+    var(--muted);
+}
+
+
+/* BUTTONS */
+
+.tennis-big-action {
+  min-width:
+    230px;
+
+  min-height:
+    54px;
+}
+
+
+.tennis-winner-button {
+  min-width:
+    220px;
+
+  min-height:
+    58px;
+}
+
+
+/* STANDINGS */
 
 .tennis-standings {
   width:
-    min(760px, 100%);
+    min(
+      760px,
+      100%
+    );
 
   margin:
-    28px auto 0;
+    28px auto;
 }
+
+
+.tennis-section-heading {
+  margin-bottom:
+    10px;
+
+  color:
+    var(--cyan);
+
+  font-size:
+    0.85rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.14em;
+}
+
 
 .tennis-standing-row {
-  display: grid;
+  display:
+    grid;
 
   grid-template-columns:
-    1fr auto;
+    minmax(
+      170px,
+      1fr
+    )
+    70px
+    70px
+    70px;
 
-  gap: 16px;
+  align-items:
+    center;
 
-  padding: 14px 18px;
+  gap:
+    10px;
+
+  padding:
+    14px 18px;
 
   border-bottom:
-    1px solid rgba(255, 255, 255, 0.09);
+    1px solid
+    rgba(255, 255, 255, 0.09);
+
+  text-align:
+    left;
 }
 
-.tennis-standing-row:last-child {
-  border-bottom: 0;
+
+.tennis-standing-row span:not(:first-child) {
+  text-align:
+    center;
 }
 
-.tennis-standing-team {
-  text-align: left;
 
-  font-weight: 800;
+.tennis-standing-header {
+  color:
+    var(--muted);
+
+  font-size:
+    0.72rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.08em;
 }
 
-.tennis-standing-wins {
-  color: var(--gold);
 
-  font-weight: 900;
+.tennis-series-score {
+  color:
+    var(--gold);
+
+  font-weight:
+    900;
+}
+
+
+/* MATCH RESULT */
+
+.tennis-match-result {
+  padding:
+    28px 10px;
+}
+
+
+.tennis-result-crown {
+  margin-bottom:
+    10px;
+
+  color:
+    var(--gold);
+
+  font-size:
+    2.5rem;
+}
+
+
+.tennis-match-result h3 {
+  margin:
+    0;
+
+  color:
+    white;
+
+  font-family:
+    Impact,
+    sans-serif;
+
+  font-size:
+    clamp(
+      2.4rem,
+      6vw,
+      5rem
+    );
+
+  letter-spacing:
+    0.04em;
+}
+
+
+.tennis-match-result p {
+  color:
+    var(--cyan);
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.15em;
+}
+
+
+/* FINALISTS */
+
+.tennis-final-preview {
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr auto 1fr;
+
+  align-items:
+    center;
+
+  gap:
+    22px;
+
+  margin:
+    28px auto;
+
+  max-width:
+    760px;
+}
+
+
+.tennis-finalist-card {
+  padding:
+    22px;
+
+  border:
+    1px solid
+    rgba(243, 201, 105, 0.30);
+
+  border-radius:
+    16px;
+
+  background:
+    rgba(243, 201, 105, 0.045);
+}
+
+
+.tennis-finalist-card span {
+  display:
+    block;
+
+  margin-bottom:
+    8px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    0.7rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.12em;
+}
+
+
+.tennis-finalist-card strong {
+  color:
+    white;
+
+  font-size:
+    1.5rem;
+}
+
+
+.tennis-final-vs {
+  color:
+    var(--gold);
+
+  font-family:
+    Impact,
+    sans-serif;
+
+  font-size:
+    2rem;
+}
+
+
+.tennis-third-place-note {
+  color:
+    var(--muted);
+}
+
+
+/* TIE BREAK */
+
+.tennis-tiebreak-selection {
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  justify-content:
+    center;
+
+  gap:
+    12px;
+
+  margin:
+    26px 0 14px;
+}
+
+
+.tennis-tiebreak-team.selected {
+  border-color:
+    white;
+
+  color:
+    white;
+
+  box-shadow:
+    0 0 20px
+    rgba(255, 255, 255, 0.20);
+}
+
+
+.tennis-tiebreak-status {
+  color:
+    var(--gold);
+
+  font-size:
+    0.8rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.12em;
+}
+
+
+/* CHAMPION */
+
+.tennis-champion-reveal {
+  padding:
+    28px 10px;
+}
+
+
+.tennis-trophy {
+  color:
+    var(--gold);
+
+  font-size:
+    4rem;
+
+  line-height:
+    1;
+}
+
+
+.tennis-champion-reveal p {
+  margin:
+    12px 0 2px;
+
+  color:
+    var(--cyan);
+
+  font-size:
+    0.75rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.18em;
+}
+
+
+.tennis-champion-reveal h3 {
+  margin:
+    4px 0;
+
+  color:
+    white;
+
+  font-family:
+    Impact,
+    sans-serif;
+
+  font-size:
+    clamp(
+      2.2rem,
+      5vw,
+      4rem
+    );
+}
+
+
+.tennis-champion-name {
+  margin-top:
+    12px;
+
+  color:
+    var(--gold);
+
+  font-family:
+    Impact,
+    sans-serif;
+
+  font-size:
+    clamp(
+      3rem,
+      7vw,
+      6rem
+    );
+
+  letter-spacing:
+    0.03em;
+}
+
+
+.tennis-awards {
+  width:
+    min(
+      650px,
+      100%
+    );
+
+  margin:
+    24px auto 0;
+}
+
+
+.tennis-award-row {
+  display:
+    grid;
+
+  grid-template-columns:
+    120px
+    1fr
+    80px;
+
+  align-items:
+    center;
+
+  gap:
+    14px;
+
+  padding:
+    14px 18px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.08);
+}
+
+
+.tennis-award-row span {
+  color:
+    var(--muted);
+
+  font-size:
+    0.72rem;
+
+  font-weight:
+    900;
+
+  letter-spacing:
+    0.08em;
+
+  text-align:
+    left;
+}
+
+
+.tennis-award-row strong {
+  text-align:
+    left;
+}
+
+
+.tennis-award-row b {
+  color:
+    var(--gold);
+
+  font-size:
+    1.3rem;
+}
+
+
+.tennis-award-row.champion {
+  background:
+    rgba(243, 201, 105, 0.05);
+}
+
+
+/* REVEAL */
+
+.tennis-reveal-in {
+  animation:
+    tennisRevealIn
+    0.4s
+    ease-out;
+}
+
+
+@keyframes tennisRevealIn {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      translateY(
+        10px
+      )
+      scale(
+        0.985
+      );
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      translateY(
+        0
+      )
+      scale(
+        1
+      );
+  }
+}
+
+
+/* MOBILE */
+
+@media (
+  max-width:
+  760px
+) {
+
+  .tennis-match-display {
+    padding:
+      20px 14px;
+  }
+
+
+  .tennis-draw-table {
+    overflow-x:
+      auto;
+  }
+
+
+  .tennis-draw-row {
+    min-width:
+      690px;
+  }
+
+
+  .tennis-match-card {
+    grid-template-columns:
+      1fr;
+
+    gap:
+      14px;
+  }
+
+
+  .tennis-match-centre {
+    flex-direction:
+      row;
+
+    justify-content:
+      center;
+  }
+
+
+  .tennis-final-preview {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .tennis-final-vs {
+    margin:
+      -4px 0;
+  }
+
+
+  .tennis-standing-row {
+    grid-template-columns:
+      minmax(
+        130px,
+        1fr
+      )
+      44px
+      44px
+      44px;
+  }
+
+
+  .tennis-award-row {
+    grid-template-columns:
+      95px
+      1fr
+      55px;
+  }
 }
 /* =========================================================
    PIXEL MOVIE
