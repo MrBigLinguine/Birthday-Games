@@ -2590,32 +2590,42 @@ function initialiseCategoryTrivia() {
 
 
   let currentQuestion = null;
-
-  let currentCategoryIndex =
-    null;
-
-  let currentQuestionIndex =
-    null;
+  let currentCategoryIndex = null;
+  let currentQuestionIndex = null;
 
   let currentTeamIndex =
     state.category.currentTurn %
     state.teamCount;
 
-  let answerTimer =
-    null;
+  let answeringTeamIndex =
+    currentTeamIndex;
 
-  let stealTimer =
-    null;
+  let answerTimer = null;
+  let stealTimer = null;
 
-  let stealTeamIndex =
-    null;
+  let stealMode = false;
+
+
+  const correctButton =
+    $("#category-correct-button");
+
+  const wrongButton =
+    $("#category-wrong-button");
+
+  const revealButton =
+    $("#category-reveal-button");
+
+  const hostControls =
+    $("#category-host-controls");
+
+  const stealPanel =
+    $("#category-steal-panel");
 
 
   function tileKey(
     categoryIndex,
     questionIndex
   ) {
-
     return (
       `${categoryIndex}-${questionIndex}`
     );
@@ -2630,20 +2640,55 @@ function initialiseCategoryTrivia() {
     const questionView =
       $("#category-question-view");
 
+    questionView.classList.add(
+      "hidden"
+    );
 
-    questionView
-      .classList.add(
-        "hidden"
-      );
-
-
-    board
-      .classList.remove(
-        "hidden"
-      );
-
+    board.classList.remove(
+      "hidden"
+    );
 
     board.innerHTML = "";
+
+
+    let boardTurnIndicator =
+      document.getElementById(
+        "category-board-turn"
+      );
+
+
+    if (!boardTurnIndicator) {
+
+      boardTurnIndicator =
+        document.createElement(
+          "div"
+        );
+
+      boardTurnIndicator.id =
+        "category-board-turn";
+
+      boardTurnIndicator.className =
+        "turn-indicator category-board-turn";
+
+      board.parentElement.insertBefore(
+        boardTurnIndicator,
+        board
+      );
+    }
+
+
+    boardTurnIndicator.classList.remove(
+      "hidden"
+    );
+
+
+    currentTeamIndex =
+      state.category.currentTurn %
+      state.teamCount;
+
+
+    boardTurnIndicator.textContent =
+      `${state.teams[currentTeamIndex].name.toUpperCase()}'S TURN — CHOOSE A QUESTION`;
 
 
     CATEGORY_DATA.forEach(
@@ -2671,7 +2716,6 @@ function initialiseCategoryTrivia() {
 
         heading.textContent =
           category.category;
-
 
         column.appendChild(
           heading
@@ -2715,6 +2759,9 @@ function initialiseCategoryTrivia() {
               button.classList.add(
                 "used"
               );
+
+              button.disabled =
+                true;
             }
 
 
@@ -2769,27 +2816,47 @@ function initialiseCategoryTrivia() {
     const questionView =
       $("#category-question-view");
 
+    const boardTurnIndicator =
+      $("#category-board-turn");
 
-    board
-      .classList.add(
+    const questionTurnIndicator =
+      $("#category-turn-indicator");
+
+
+    board.classList.add(
+      "hidden"
+    );
+
+    boardTurnIndicator
+      ?.classList.add(
         "hidden"
       );
 
+    questionView.classList.remove(
+      "hidden"
+    );
 
-    questionView
-      .classList.remove(
-        "hidden"
-      );
+
+    if (
+      questionTurnIndicator
+    ) {
+
+      questionTurnIndicator
+        .classList.add(
+          "hidden"
+        );
+    }
 
 
     currentTeamIndex =
       state.category.currentTurn %
       state.teamCount;
 
+    answeringTeamIndex =
+      currentTeamIndex;
 
-    $("#category-turn-indicator")
-      .textContent =
-      `${state.teams[currentTeamIndex].name}'S QUESTION`;
+    stealMode =
+      false;
 
 
     $("#category-question")
@@ -2816,23 +2883,43 @@ function initialiseCategoryTrivia() {
       );
 
 
-    $("#category-steal-panel")
-      .classList.add(
-        "hidden"
-      );
+    stealPanel.classList.add(
+      "hidden"
+    );
 
 
-    $("#category-host-controls")
-      .classList.remove(
-        "hidden"
-      );
+    hostControls.classList.remove(
+      "hidden"
+    );
+
+
+    correctButton.classList.remove(
+      "hidden"
+    );
+
+    wrongButton.classList.remove(
+      "hidden"
+    );
+
+    revealButton.classList.remove(
+      "hidden"
+    );
+
+
+    correctButton.textContent =
+      "CORRECT";
+
+    wrongButton.textContent =
+      "WRONG / STEAL";
 
 
     answerTimer =
       makeTimer({
         duration: 30,
         element:
-          $("#category-timer")
+          $("#category-timer"),
+        onFinish:
+          beginSteal
       });
 
 
@@ -2867,10 +2954,9 @@ function initialiseCategoryTrivia() {
       image.alt =
         currentQuestion.q;
 
-      wrapper.classList
-        .remove(
-          "hidden"
-        );
+      wrapper.classList.remove(
+        "hidden"
+      );
 
     } else {
 
@@ -2878,10 +2964,9 @@ function initialiseCategoryTrivia() {
         "src"
       );
 
-      wrapper.classList
-        .add(
-          "hidden"
-        );
+      wrapper.classList.add(
+        "hidden"
+      );
     }
   }
 
@@ -2928,40 +3013,6 @@ function initialiseCategoryTrivia() {
   }
 
 
-  function finishQuestion() {
-
-    if (answerTimer) {
-      answerTimer.stop();
-    }
-
-    if (stealTimer) {
-      stealTimer.stop();
-    }
-
-
-    markCurrentTileUsed();
-
-    advanceTurn();
-
-
-    if (
-      categoryIsComplete()
-    ) {
-
-      markGameComplete(
-        "category-trivia"
-      );
-
-      returnToHub();
-
-      return;
-    }
-
-
-    renderBoard();
-  }
-
-
   function categoryIsComplete() {
 
     const totalQuestions =
@@ -2997,6 +3048,10 @@ function initialiseCategoryTrivia() {
       answerTimer.stop();
     }
 
+    if (stealTimer) {
+      stealTimer.stop();
+    }
+
 
     $("#category-answer-section")
       .classList.remove(
@@ -3011,22 +3066,146 @@ function initialiseCategoryTrivia() {
   }
 
 
-  function correctAnswer() {
+  function finishAndReveal(
+    correct
+  ) {
 
     if (answerTimer) {
       answerTimer.stop();
     }
 
+    if (stealTimer) {
+      stealTimer.stop();
+    }
 
-    changeScore(
-      currentTeamIndex,
-      currentQuestion.value
+
+    if (correct) {
+
+      changeScore(
+        answeringTeamIndex,
+        currentQuestion.value
+      );
+
+
+      flashCorrect();
+
+    } else {
+
+      flashWrong();
+    }
+
+
+    revealAnswer();
+
+    markCurrentTileUsed();
+
+
+    stealPanel.classList.add(
+      "hidden"
     );
 
 
-    flashCorrect();
+    correctButton.classList.add(
+      "hidden"
+    );
 
-    finishQuestion();
+    wrongButton.classList.add(
+      "hidden"
+    );
+
+    revealButton.classList.add(
+      "hidden"
+    );
+
+
+    const oldReturn =
+      document.getElementById(
+        "category-return-button"
+      );
+
+
+    if (oldReturn) {
+      oldReturn.remove();
+    }
+
+
+    const returnButton =
+      document.createElement(
+        "button"
+      );
+
+
+    returnButton.id =
+      "category-return-button";
+
+    returnButton.type =
+      "button";
+
+    returnButton.className =
+      "primary-button";
+
+    returnButton.textContent =
+      "RETURN TO BOARD";
+
+
+    returnButton.onclick =
+      () => {
+
+        advanceTurn();
+
+
+        if (
+          categoryIsComplete()
+        ) {
+
+          markGameComplete(
+            "category-trivia"
+          );
+
+          returnToHub();
+
+          return;
+        }
+
+
+        returnButton.remove();
+
+        renderBoard();
+      };
+
+
+    hostControls.appendChild(
+      returnButton
+    );
+
+
+    saveState();
+  }
+
+
+  function correctAnswer() {
+
+    finishAndReveal(
+      true
+    );
+  }
+
+
+  function wrongAnswer() {
+
+    if (
+      stealMode
+    ) {
+
+      finishAndReveal(
+        false
+      );
+
+      return;
+    }
+
+
+    beginSteal();
   }
 
 
@@ -3040,16 +3219,14 @@ function initialiseCategoryTrivia() {
     flashWrong();
 
 
-    $("#category-host-controls")
-      .classList.add(
-        "hidden"
-      );
+    hostControls.classList.add(
+      "hidden"
+    );
 
 
-    $("#category-steal-panel")
-      .classList.remove(
-        "hidden"
-      );
+    stealPanel.classList.remove(
+      "hidden"
+    );
 
 
     renderStealButtons();
@@ -3065,7 +3242,12 @@ function initialiseCategoryTrivia() {
         onFinish:
           () => {
 
-            finishQuestion();
+            answeringTeamIndex =
+              currentTeamIndex;
+
+            finishAndReveal(
+              false
+            );
           }
       });
 
@@ -3080,7 +3262,8 @@ function initialiseCategoryTrivia() {
       $("#category-steal-team-buttons");
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+      "";
 
 
     activeTeams()
@@ -3103,6 +3286,7 @@ function initialiseCategoryTrivia() {
               "button"
             );
 
+
           button.className =
             "team-button";
 
@@ -3117,14 +3301,22 @@ function initialiseCategoryTrivia() {
             "click",
             () => {
 
-              stealTeamIndex =
+              answeringTeamIndex =
                 index;
+
+              stealMode =
+                true;
 
 
               playSfx(
                 "team-buzz-sound",
                 0.62
               );
+
+
+              if (stealTimer) {
+                stealTimer.stop();
+              }
 
 
               Array.from(
@@ -3142,10 +3334,34 @@ function initialiseCategoryTrivia() {
               button.disabled =
                 false;
 
-
               button.style
                 .borderColor =
                 "white";
+
+
+              hostControls.classList.remove(
+                "hidden"
+              );
+
+
+              correctButton.classList.remove(
+                "hidden"
+              );
+
+              wrongButton.classList.remove(
+                "hidden"
+              );
+
+              revealButton.classList.remove(
+                "hidden"
+              );
+
+
+              correctButton.textContent =
+                "CORRECT";
+
+              wrongButton.textContent =
+                "WRONG";
             }
           );
 
@@ -3155,112 +3371,18 @@ function initialiseCategoryTrivia() {
           );
         }
       );
-
-
-    const correct =
-      document.createElement(
-        "button"
-      );
-
-    correct.className =
-      "correct-button";
-
-    correct.type =
-      "button";
-
-    correct.textContent =
-      "STEAL CORRECT";
-
-
-    correct.addEventListener(
-      "click",
-      () => {
-
-        if (
-          stealTeamIndex ===
-          null
-        ) {
-          return;
-        }
-
-
-        if (stealTimer) {
-          stealTimer.stop();
-        }
-
-
-        changeScore(
-          stealTeamIndex,
-          currentQuestion.value
-        );
-
-
-        flashCorrect();
-
-        finishQuestion();
-      }
-    );
-
-
-    const wrong =
-      document.createElement(
-        "button"
-      );
-
-    wrong.className =
-      "wrong-button";
-
-    wrong.type =
-      "button";
-
-    wrong.textContent =
-      "NO STEAL";
-
-
-    wrong.addEventListener(
-      "click",
-      () => {
-
-        if (stealTimer) {
-          stealTimer.stop();
-        }
-
-
-        if (
-          stealTeamIndex !==
-          null
-        ) {
-          flashWrong();
-        }
-
-
-        finishQuestion();
-      }
-    );
-
-
-    container.appendChild(
-      correct
-    );
-
-    container.appendChild(
-      wrong
-    );
   }
 
 
-  $("#category-correct-button")
-    .onclick =
+  correctButton.onclick =
     correctAnswer;
 
 
-  $("#category-wrong-button")
-    .onclick =
-    beginSteal;
+  wrongButton.onclick =
+    wrongAnswer;
 
 
-  $("#category-reveal-button")
-    .onclick =
+  revealButton.onclick =
     revealAnswer;
 
 
