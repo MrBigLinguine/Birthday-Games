@@ -2075,6 +2075,29 @@ function initialisePubTrivia() {
 
 
   let questionIndex = 0;
+  let phase = "questions";
+
+
+  const number =
+    $("#pub-question-number");
+
+  const question =
+    $("#pub-question");
+
+  const answerSection =
+    $("#pub-answer-section");
+
+  const answer =
+    $("#pub-answer");
+
+  const explanation =
+    $("#pub-explanation");
+
+  const revealButton =
+    $("#pub-reveal-button");
+
+  const nextButton =
+    $("#pub-next-button");
 
 
   function showQuestion() {
@@ -2085,65 +2108,121 @@ function initialisePubTrivia() {
       ];
 
 
-    $("#pub-question-number")
-      .textContent =
+    number.textContent =
       questionIndex + 1;
 
 
-    $("#pub-question")
-      .textContent =
+    question.textContent =
       item.q;
 
 
-    $("#pub-answer")
-      .textContent =
-      item.a;
-
-
-    $("#pub-explanation")
-      .textContent =
-      item.why;
-
-
-    $("#pub-answer-section")
+    answerSection
       .classList.add(
         "hidden"
       );
 
 
-    $("#pub-reveal-button")
+    nextButton
+      .classList.add(
+        "hidden"
+      );
+
+
+    revealButton
       .classList.remove(
         "hidden"
       );
 
 
-    $("#pub-next-button")
-      .classList.add(
-        "hidden"
-      );
+    if (
+      phase ===
+      "questions"
+    ) {
+
+      revealButton.textContent =
+        questionIndex ===
+        PUB_QUESTIONS.length - 1
+          ? "PENS DOWN"
+          : "NEXT QUESTION";
+
+    } else {
+
+      revealButton.textContent =
+        "REVEAL ANSWER";
+    }
   }
 
 
-  $("#pub-reveal-button")
-    .onclick =
+  revealButton.onclick =
     () => {
 
-      $("#pub-answer-section")
+      if (
+        phase ===
+        "questions"
+      ) {
+
+        if (
+          questionIndex <
+          PUB_QUESTIONS.length - 1
+        ) {
+
+          questionIndex += 1;
+
+          showQuestion();
+
+          return;
+        }
+
+
+        phase =
+          "answers";
+
+        questionIndex =
+          0;
+
+        showQuestion();
+
+        return;
+      }
+
+
+      const item =
+        PUB_QUESTIONS[
+          questionIndex
+        ];
+
+
+      answer.textContent =
+        item.a;
+
+
+      explanation.textContent =
+        item.why;
+
+
+      answerSection
         .classList.remove(
           "hidden"
         );
 
 
-      $("#pub-reveal-button")
+      revealButton
         .classList.add(
           "hidden"
         );
 
 
-      $("#pub-next-button")
+      nextButton
         .classList.remove(
           "hidden"
         );
+
+
+      nextButton.textContent =
+        questionIndex ===
+        PUB_QUESTIONS.length - 1
+          ? "FINISH PUB TRIVIA"
+          : "NEXT ANSWER";
 
 
       playSfx(
@@ -2153,8 +2232,7 @@ function initialisePubTrivia() {
     };
 
 
-  $("#pub-next-button")
-    .onclick =
+  nextButton.onclick =
     () => {
 
       if (
@@ -2180,7 +2258,6 @@ function initialisePubTrivia() {
 
   showQuestion();
 }
-
 
 /* ============================================================
    CATEGORY TRIVIA DATA
