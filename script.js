@@ -2626,9 +2626,7 @@ function initialiseCategoryTrivia() {
     categoryIndex,
     questionIndex
   ) {
-    return (
-      `${categoryIndex}-${questionIndex}`
-    );
+    return `${categoryIndex}-${questionIndex}`;
   }
 
 
@@ -2916,8 +2914,10 @@ function initialiseCategoryTrivia() {
     answerTimer =
       makeTimer({
         duration: 30,
+
         element:
           $("#category-timer"),
+
         onFinish:
           beginSteal
       });
@@ -3086,7 +3086,6 @@ function initialiseCategoryTrivia() {
         currentQuestion.value
       );
 
-
       flashCorrect();
 
     } else {
@@ -3232,27 +3231,9 @@ function initialiseCategoryTrivia() {
     renderStealButtons();
 
 
-    stealTimer =
-      makeTimer({
-        duration: 15,
-
-        element:
-          $("#category-steal-timer"),
-
-        onFinish:
-          () => {
-
-            answeringTeamIndex =
-              currentTeamIndex;
-
-            finishAndReveal(
-              false
-            );
-          }
-      });
-
-
-    stealTimer.start();
+    $("#category-steal-timer")
+      .textContent =
+      "15";
   }
 
 
@@ -3317,6 +3298,26 @@ function initialiseCategoryTrivia() {
               if (stealTimer) {
                 stealTimer.stop();
               }
+
+
+              stealTimer =
+                makeTimer({
+                  duration: 15,
+
+                  element:
+                    $("#category-steal-timer"),
+
+                  onFinish:
+                    () => {
+
+                      finishAndReveal(
+                        false
+                      );
+                    }
+                });
+
+
+              stealTimer.start();
 
 
               Array.from(
