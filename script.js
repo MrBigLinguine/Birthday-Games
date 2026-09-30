@@ -2012,11 +2012,11 @@ const PUB_QUESTIONS = [
 
   {
     q:
-      "Which rock band took its name from a brand of sewing machine?",
+      "Which rock band got its name from a electrical appliance?",
     a:
-      "The White Stripes",
+      "AC/DC",
     why:
-      "The name was influenced by Meg White's interest in peppermint candy and the band's surname rather than a sewing-machine brand."
+      "The name AC/DC came from the electrical abbreviation printed on a sewing machine owned by the Young family. It stands for alternating current/direct current."
   },
 
   {
@@ -2039,11 +2039,11 @@ const PUB_QUESTIONS = [
 
   {
     q:
-      "What is the name of the fishing technique where an artificial fly is used as bait?",
+      "What is a juvenile snapper commonly called in Australia?",
     a:
-      "Fly fishing",
+      "A pinkie",
     why:
-      "Fly fishing uses an artificial fly cast with specialised line and tackle."
+      "Small juvenile snapper are commonly called pinkies because of their pinkish-red colouring."
   }
 ];
 
