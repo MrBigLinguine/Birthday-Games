@@ -3817,7 +3817,7 @@ const REVIEW_DATA = [
 
   {
     title: "Jaws",
-    stars: 2,
+    stars: 1975,
     author: "Shafrillas Productions",
     review:
       "The Meg (2018) is better AND it has Jason Statham innit. This movie fails cinema.",
@@ -3827,7 +3827,7 @@ const REVIEW_DATA = [
 
   {
     title: "The Matrix",
-    stars: 1,
+    stars: 1999,
     author: "Kaho Matsui",
     review:
       "Got scared at the bellybutton scene when I was 6 and then I ran outside crying and got stung by a bee in the yard. Awful experience. Dad yelled at me after that too. It was no good.",
@@ -3837,7 +3837,7 @@ const REVIEW_DATA = [
 
   {
     title: "Gladiator",
-    stars: 1,
+    stars: 2000,
     author: "Adambolt",
     review:
       "I was not entertained.",
@@ -3847,7 +3847,7 @@ const REVIEW_DATA = [
 
   {
     title: "The Lion King",
-    stars: 3,
+    stars: 1994,
     author: "Clownhead",
     review:
       "If only Bill added a gay meerkat with anxiety into the OG Hamlet. Could have had a real hit on his hands.",
@@ -3857,7 +3857,7 @@ const REVIEW_DATA = [
 
   {
     title: "2001: A Space Odyssey",
-    stars: 2,
+    stars: 1968,
     author: "Carter",
     review:
       "I am no film expert by any means, but this has got to be the most boring, anticlimactic and unremarkable movie I’ve ever seen. There is no real plot or characters. Nothing even remotely interesting happens after the beginning with the apes. 95% of the movie there is no dialogue. All of this could be made up for if it gave the audience something to contemplate, but it doesn’t. It’s astonishing to me that this is regarded as one of the best movies of all time.",
@@ -3867,7 +3867,7 @@ const REVIEW_DATA = [
 
   {
     title: "Pulp Fiction",
-    stars: 1,
+    stars: 1994,
     author: "Anyonebutsyndey",
     review:
       "HE GOES BACK FOR THE POPTART. THE FUCKEN POPTART. HE WAS SO CLOSE TO BEING GOOD, SAFE, FINE, BUT NOOOO, HE NEEDS A POPTART. MOTHERFUCKEN BRUCE WILLIS POPTART-EATING ASS. FUCKEN POPTART. THE GODDAMNED POPTART. BRUCE WILLIS FUCKEN GRANDFATHER’S ASS-WATCH MOTHERFUCKER NEEDS A GOD DAMN POPTART?! ARE YOU KIDDING ME??? ZERO FUCKING STARS.",
@@ -3878,7 +3878,7 @@ const REVIEW_DATA = [
   {
     title:
       "The Lord of the Rings: The Fellowship of the Ring",
-    stars: 1,
+    stars: 2001,
     author: "davem82",
     review:
       "Absolutely terrible. Three hours of people walking.",
@@ -3888,7 +3888,7 @@ const REVIEW_DATA = [
 
   {
     title: "The Godfather",
-    stars: 2,
+    stars: 1972,
     author: "Weed King",
     review:
       "Justice for the horse they killed for that one scene!!!",
@@ -3898,7 +3898,7 @@ const REVIEW_DATA = [
 
   {
     title: "Fight Club",
-    stars: 3,
+    stars: 1999,
     author: "Fraser Costen",
     review:
       "I actually wanted to learn how to make soap. Now I am being arrested on domestic terrorism charges.",
@@ -3908,7 +3908,7 @@ const REVIEW_DATA = [
 
   {
     title: "Forrest Gump",
-    stars: 1,
+    stars: 1994,
     author: "Jed",
     review:
       "Awful yet effective piece of propaganda. Obey all orders blindly and you will be promptly rewarded. Disobey and fight back and you get AIDS and die.",
